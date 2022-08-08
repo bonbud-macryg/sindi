@@ -5,7 +5,7 @@
   $%  state-0
   ==
 +$  card     card:agent:gall
-+$  state-0  [%0 =feeds =terms]
++$  state-0  [%0 =feeds =keys]
 --
 %-  agent:dbug
 =|  state-0
@@ -16,7 +16,7 @@
     def   ~(. (default-agent this %.n) bowl)
 ++  on-init
     ^-  (quip card _this)
-    `this(feeds ~, terms ~)
+    `this(feeds ~, keys '')
 ++  on-save  !>(state)
 ++  on-load  on-load:def
 ++  on-poke
@@ -25,9 +25,12 @@
   ?+  mark  (on-poke:def mark vase)
     %take
     =/  action  !<(take vase)
+    ::  TODO: confirm state of `+.action` is $json
     ?-  -.action
-      %new-terms  `this(terms +.action)
+      %new-keys   `this(keys +.action)
+                  ::  (welp feeds (func +.action))
       %add-feeds  `this(feeds (welp feeds +.action))
+                  ::  (wipe (func +.action) feeds)
       %del-feeds  `this(feeds (wipe +.action feeds))
     ==
     ::

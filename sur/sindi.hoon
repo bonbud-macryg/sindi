@@ -1,18 +1,17 @@
 |%
 +$  name   @t
 +$  link   @t
-+$  term   @t
++$  keys   @t
 +$  date   @da
 ::  +$  item   [name link date]
-+$  based  @t  ::  json'd [feeds terms]
++$  based  @t  ::  json'd [feeds keys]
 +$  feeds  (list link)
-+$  terms  (list term)
 ::
 ::  actions to take
 +$  take
-  $%  [%add-feeds (list link)]
-      [%del-feeds (list link)]
-      [%new-terms (list term)]
+  $%  [%add-feeds @t]
+      [%del-feeds @t]
+      [%new-keys @t]
   ==
 ::  info to give
 +$  give

@@ -8,8 +8,27 @@
 ::
 ++  base
   !!
-  ::  |=  a=status
+  ::  |=  [=feeds =keys]
   ::  encode to base64
+::
+++  pars
+  ::  reparser
+  ::  TODO: turn output cell to list
+  ::        fix that ^-
+  ::        cast %feeds output to @t
+  ::        take arb. feeds
+  =,  dejs:format
+  |=  [a=?(%feeds %keys) b=json]
+  ^-  ?(^ @t)
+  ?-  a
+    %feeds  %.  b
+            %-  ot
+            :~  [%feeds (at ~[so so so so])]
+            ==
+    %keys   %.  b
+            %-  ot
+            :~  [%keywords so]
+  ==        ==
 ::
 ++  wipe
   |=  [del=(list link) src=(list link)]
