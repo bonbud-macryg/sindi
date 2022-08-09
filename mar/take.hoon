@@ -5,13 +5,12 @@
   ++  noun  put
   --
 ++  grab
-  ++  noun  put
+  ++  noun  take
   ++  json
     =,  dejs:format
     |=  jay=json
-    ^-  json
-    %.  %-  need
-      %-  de-json:html  jay
+    ^-  take
+    %.  jay
     %-  ot
       :~
         ::  TODO: take arbitrarily long list

@@ -26,12 +26,12 @@
     %take
     =/  action  !<(take vase)
     ::  TODO: confirm state of `+.action` is $json
+    ~!  +.action
     ?-  -.action
-      %new-keys   `this(keys +.action)
-                  ::  (welp feeds (func +.action))
-      %add-feeds  `this(feeds (welp feeds +.action))
-                  ::  (wipe (func +.action) feeds)
-      %del-feeds  `this(feeds (wipe +.action feeds))
+      %new-keys   `this(keys (parse-keys [%keys +.action]))
+                  ::  needs to spit out list
+      %add-feeds  `this(feeds (welp feeds (parse-feeds [%feeds +.action])))
+      %del-feeds  `this(feeds (wipe (parse-feeds [%feeds +.action]) feeds))
     ==
     ::
     %give

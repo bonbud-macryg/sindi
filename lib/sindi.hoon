@@ -11,24 +11,30 @@
   ::  |=  [=feeds =keys]
   ::  encode to base64
 ::
-++  pars
+++  parse-feeds
   ::  reparser
   ::  TODO: turn output cell to list
   ::        fix that ^-
   ::        cast %feeds output to @t
   ::        take arb. feeds
   =,  dejs:format
-  |=  [a=?(%feeds %keys) b=json]
-  ^-  ?(^ @t)
-  ?-  a
-    %feeds  %.  b
-            %-  ot
-            :~  [%feeds (at ~[so so so so])]
-            ==
-    %keys   %.  b
-            %-  ot
-            :~  [%keywords so]
-  ==        ==
+  |=  [a=%feeds b=json]
+  ::  must spit out list
+  ::  look into ar:so
+  ^-  [@t @t @t @t]
+  %.  b
+  %-  ot
+  :~  [%feeds (at ~[so so so so])]
+  ==
+::
+++  parse-keys
+  =,  dejs:format
+  |=  [a=%keys b=json]
+  ^-  @t
+  %.  b
+  %-  ot
+  :~  [%keywords so]
+  ==
 ::
 ++  wipe
   |=  [del=(list link) src=(list link)]
