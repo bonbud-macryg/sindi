@@ -7,14 +7,14 @@
 ++  grab
   ++  noun  take
   ++  json
+    ::  causes need-have error
     =,  dejs:format
     |=  jay=json
     ^-  take
     %.  jay
-    %-  ot
+    %-  of
       :~
-        ::  TODO: take arbitrarily long list
-        [%feeds (at ~[so so so so])]
+        [%feeds (ar so)]
         [%keywords so]
       ==
 ++  grad  %noun

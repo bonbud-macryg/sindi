@@ -25,19 +25,17 @@
   ?+  mark  (on-poke:def mark vase)
     %take
     =/  action  !<(take vase)
-    ::  TODO: confirm state of `+.action` is $json
-    ~!  +.action
+    ::  TODO: take JSON as well as $json
     ?-  -.action
-      %new-keys   `this(keys (parse-keys [%keys +.action]))
-                  ::  needs to spit out list
-      %add-feeds  `this(feeds (welp feeds (parse-feeds [%feeds +.action])))
-      %del-feeds  `this(feeds (wipe (parse-feeds [%feeds +.action]) feeds))
+      %new-keys   `this(keys (parse-keys +.action))
+      %add-feeds  `this(feeds (welp feeds (parse-feeds +.action)))
+      %del-feeds  `this(feeds (wipe (parse-feeds +.action) feeds))
     ==
     ::
     %give
     =/  update  !<(give vase)
     ?-  -.update
-      %url  !!  ::  json:based
+      %base  !!  ::  json:based
     ==
   ==
 ::
