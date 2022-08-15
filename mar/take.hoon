@@ -7,7 +7,6 @@
 ++  grab
   ++  noun  take
   ++  json
-    ::  causes need-have error
     =,  dejs:format
     |=  jay=json
     ^-  take

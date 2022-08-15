@@ -25,7 +25,7 @@
   ?+  mark  (on-poke:def mark vase)
     %take
     =/  action  !<(take vase)
-    ::  TODO: take JSON as well as $json
+    ::  only takes $json, Eyre will turn from JSON to $json
     ?-  -.action
       %new-keys   `this(keys (parse-keys +.action))
       %add-feeds  `this(feeds (welp feeds (parse-feeds +.action)))
@@ -35,7 +35,7 @@
     %give
     =/  update  !<(give vase)
     ?-  -.update
-      %base  !!  ::  json:based
+      %base  !!  ::  (base JSON)
     ==
   ==
 ::
