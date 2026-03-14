@@ -1,5 +1,29 @@
 imports:
   base-dev: ./dist
+  rss-sub:  ./dist
+
+git module rss-sub:
+  url:    https://github.com/bonbud-macryg/rss-sub
+  reup:   main
+  export: src
+  pick:
+    - src/lib/manx-utils.hoon
+    - src/lib/rss-sub.hoon
+    - src/mar/atom/entries.hoon
+    - src/mar/atom/entry.hoon
+    - src/mar/atom/feed.hoon
+    - src/mar/feed/last-update.hoon
+    - src/mar/feed/maximum.hoon
+    - src/mar/feed/urls.hoon
+    - src/mar/rss/channel.hoon
+    - src/mar/rss/item.hoon
+    - src/mar/rss/items.hoon
+    - src/sur/rss-atom.hoon
+    - src/sur/rss-atom.hoon
+    - src/ted/atom-entry.hoon
+    - src/ted/rss-atom.hoon
+    - src/ted/rss-item.hoon
+  rev: af75477a5b6dc6c6660d973fbdf1faaafc1efd08
 
 git module base-dev:
   url:    https://github.com/urbit/urbit
@@ -11,10 +35,10 @@ git module base-dev:
     - pkg/base-dev/lib/skeleton.hoon
     - pkg/base-dev/lib/verb.hoon
     - pkg/base-dev/mar/bill.hoon
-    - pkg/base-dev/mar/kelvin.hoon
-    - pkg/base-dev/mar/noun.hoon
-    - pkg/base-dev/mar/mime.hoon
     - pkg/base-dev/mar/hoon.hoon
+    - pkg/base-dev/mar/kelvin.hoon
+    - pkg/base-dev/mar/mime.hoon
+    - pkg/base-dev/mar/noun.hoon
     - pkg/base-dev/sur/verb.hoon
   rev: 41dd3b5f7c554ac615d0db9eaa5fe46071d47bc8
 
