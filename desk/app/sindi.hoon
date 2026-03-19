@@ -1,48 +1,85 @@
-/-  *sindi
-/+  *sindi, default-agent, dbug
-|%
-+$  versioned-state
-  $%  state-0
-  ==
-+$  card     card:agent:gall
-+$  state-0  [%0 =feeds =keys]
---
-%-  agent:dbug
-=|  state-0
-=*  state  -
+/-  *mast, *sindi, ra=rss-atom
+/+  mast, rss-sub, verb, default-agent
 ^-  agent:gall
+%+  verb  &
+%-  mast
+%-  agent:rss-sub
 |_  =bowl:gall
 +*  this  .
-    def   ~(. (default-agent this %.n) bowl)
-++  on-init
-    ^-  (quip card _this)
-    `this(feeds ~, keys '')
-++  on-save  !>(state)
-++  on-load  on-load:def
-++  on-poke
-  |=  [=mark =vase]
-  ^-  (quip card _this)
-  ?+  mark  (on-poke:def mark vase)
-    %take
-    =/  action  !<(take vase)
-    ::  only takes $json, Eyre will turn from JSON to $json
-    ?-  -.action
-      %new-keys   `this(keys (parse-keys +.action))
-      %add-feeds  `this(feeds (welp feeds (parse-feeds +.action)))
-      %del-feeds  `this(feeds (wipe (parse-feeds +.action) feeds))
-    ==
-    ::
-    %give
-    =/  update  !<(give vase)
-    ?-  -.update
-      %base  !!  ::  (base JSON)
-    ==
-  ==
+    def   ~(. (default-agent . %.n) bowl)
+    pyk   :*  p=(scot %p our.bowl)
+              q=q.byk.bowl
+              r=(scot %da now.bowl)
+              s=/(scot %p our.bowl)/[q.byk.bowl]/(scot %da now.bowl)
+          ==
 ::
-++  on-watch  on-watch:def
-++  on-leave  on-leave:def
-++  on-peek   on-peek:def
+++  on-init
+  ^-  (quip card:agent:gall _this)
+  :_  this
+  :~  :*  %pass   /bind
+          %agent  [our.bowl q.byk.bowl]
+          %poke   %mast-bind
+          !>(`bind:mast`['sindi' [%sindi ~ (malt `(list (pair @tas path))`~[[%urls /rss-sub/urls] [%items /feed/items]])]])
+  ==  ==
+++  on-watch  |=(=path `this)
+++  on-save   on-save:def
+++  on-load   on-load:def
+++  on-poke   on-poke:def
+++  on-peek
+    |=  =(pole knot)
+    ^-  (unit (unit cage))
+    ~&  >>  pole
+    ?+  pole
+      (on-peek:def pole)
+    ::
+    ::  all items in all feeds (filtered by time)
+    ::  .^(json %gx /=sindi=/feed/items/json)
+    ::  .^((list item:ui:sindi) %gx /=sindi=/feed/items/noun)
+        [%x %feed %items ~]
+      =/  urls  .^((list link:ui) %gx (welp s.pyk /rss-sub/urls/noun))
+      ~&  >>  urls
+      %-  some
+      %-  some
+      :-  %sindi-items
+      !>  ^-  (list item:ui)
+      %-  zing
+      %+  turn
+        urls
+      |=  src=link:ui
+      =/  feed-item
+        .^  (each (set item:rss:ra) (set entry:atom:ra))
+            %gx
+            (welp s.pyk /rss-sub/feed/items/(scot %t src)/noun)
+        ==
+      ?-  -.feed-item
+          %&
+        %+  turn  ~(tap in p.feed-item)
+        |=  =item:rss:ra
+        ^-  item:ui
+        =/  elems  p.item
+        =/  ttl  (murn elems |=(e=item-element:rss:ra ?.(?=([%title *] e) ~ `p.e)))
+        =/  lnk  (murn elems |=(e=item-element:rss:ra ?.(?=([%link *] e) ~ `p.e)))
+        =/  pub  (murn elems |=(e=item-element:rss:ra ?.(?=([%pub-date *] e) ~ `p.e)))
+        :^  ?~(ttl '' i.ttl)
+            src
+            ?~(pub now.bowl i.pub)
+        ?~(lnk '' i.lnk)
+          %|
+        %+  turn  ~(tap in p.feed-item)
+        |=  =entry:atom:ra
+        ^-  item:ui
+        =/  elems  p.entry
+        =/  ttl  (murn elems |=(e=entry-element:atom:ra ?.(?=([%title *] e) ~ `p.e)))
+        =/  lnk  (murn elems |=(e=entry-element:atom:ra ?.(?=([%link *] e) ~ `p.e)))
+        =/  pub  (murn elems |=(e=entry-element:atom:ra ?.(?=([%updated *] e) ~ `p.e)))
+        :^  ?~(ttl '' i.ttl)
+            src
+            ?~(pub now.bowl i.pub)
+        ?~(lnk '' i.lnk)
+      ==
+    ==
 ++  on-agent  on-agent:def
 ++  on-arvo   on-arvo:def
+++  on-leave  on-leave:def
 ++  on-fail   on-fail:def
 --
