@@ -25,7 +25,7 @@
   ^-  manx
   =/  =feeds:ui  !<(feeds:ui fil:(~(got by res.hull) %urls))
   =/  =items:ui  !<(items:ui fil:(~(got by res.hull) %items))
-  =/  base=tape    "sindi"
+  =/  base=tape    "/sindi"
   =/  assets=tape  "/apps/sindi"
   ;html
     ;head
