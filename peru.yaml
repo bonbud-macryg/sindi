@@ -30,7 +30,6 @@ git module rss-sub:
     - src/mar/rss/item.hoon
     - src/mar/rss/items.hoon
     - src/sur/rss-atom.hoon
-    - src/sur/rss-atom.hoon
     - src/ted/atom-entry.hoon
     - src/ted/rss-atom.hoon
     - src/ted/rss-item.hoon
