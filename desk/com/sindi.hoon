@@ -1,9 +1,12 @@
 /-  *mast, *sindi
 /+  si=sindi
 ^-  mast
+=<
 :-  ~[[%urls %feed-urls] [%items %sindi-items]]
 ^|
 |_  =hull
+::
+::  endpoints
 ++  spar
   |=  cro=crow
   ^-  blow
@@ -16,10 +19,13 @@
       [%submit %del-feed ~]
     ~[[%rss-sub !>([%del-feed url])]]
   ==
+::
+::  container
 ++  sail
   ^-  manx
   =/  =feeds:ui  !<(feeds:ui fil:(~(got by res.hull) %urls))
   =/  =items:ui  !<(items:ui fil:(~(got by res.hull) %items))
+  =/  base=tape  "/{(trip bas.hull)}"
   ;html
     ;head
       ;title: Sindi
@@ -28,51 +34,82 @@
       ;style: {(trip style:ui:si)}
     ==
     ;body
-      ;section(id "add-feed")
-        ;form(event "/submit/add-feed")
-          ;input(name "url", type "text", placeholder "Add URL");
-          ;button(type "submit"): Add
+      ;section(id "nav", style "display: flex; align-items: center; gap: 1rem;")
+        ;a(href "{base}", style "text-decoration: none")
+          ;h1: Sindi
+        ==
+        ;a(href "{base}/feeds", style "text-decoration: none")
+          ;button: Feeds
         ==
       ==
-      ;section(id "feeds-section")
-        ;ul(id "feeds")
-          ;*
-          ^-  marl
-          ?~  feeds
-            ~
-          %+  turn
-            feeds
-          |=  url=@t
-          ^-  manx
-          ;li
-            ;form(event "/submit/del-feed")
-              ;input(name "url", type "hidden", value "{(trip url)}");
-              ;button(class "remove", type "submit"): x
-            ==
-            ;span: {(trip url)}
-          ==
+      ;+
+      ::
+      ::  router
+      ?+  rut.hull
+        (main-view items base)
+          [%feeds ~]
+        (feeds-view feeds base)
+      ==
+    ==
+  ==
+--
+::
+|%
+::
+::  list of items
+++  main-view
+  |=  [=items:ui base=tape]
+  ^-  manx
+  ;article
+    ;ul(id "news")
+      ;*
+      ^-  marl
+      ?~  items
+        :~  ;li: No items yet.
+        ==
+      %+  turn
+        items
+      |=  =item:ui
+      ^-  manx
+      ::  XX group by day
+      ;li
+        ;a(href "{(trip link.item)}", target "_blank", rel "noopener noreferrer")
+          ;span: {(trip title.item)}
+        ==
+        ;a(href "{(trip (uri:link:ui:si src.item))}", target "_blank", rel "noopener noreferrer")
+          ;em: {(trip (hostname:link:ui:si src.item))}
         ==
       ==
-      ;article
-        ;ul(id "news")
-          ;*
-          ^-  marl
-          ?~  items
-            :~  ;li: No items yet.
-            ==
-          %+  turn
-            items
-          |=  =item:ui
-          ^-  manx
-          ::  XX group by day
-          ;li
-            ;a(href "{(trip link.item)}", target "_blank", rel "noopener noreferrer")
-              ;span: {(trip title.item)}
-            ==
-            ;a(href "{(trip (uri:link:ui:si src.item))}", target "_blank", rel "noopener noreferrer")
-              ;em: {(trip (hostname:link:ui:si src.item))}
-            ==
+    ==
+  ==
+::
+::  add/remove feeds
+++  feeds-view
+  |=  [=feeds:ui base=tape]
+  ^-  manx
+  ;div
+    ;section(id "add-feed")
+      ;form(event "/submit/add-feed")
+        ;input(name "url", type "text", placeholder "Add URL");
+        ;button(type "submit"): Add
+      ==
+    ==
+    ;section(id "feeds-section")
+      ;ul(id "feeds")
+        ;*
+        ^-  marl
+        ?~  feeds
+          ~
+        %+  turn
+          feeds
+        |=  url=@t
+        ^-  manx
+        ;li
+          ;form(event "/submit/del-feed")
+            ;input(name "url", type "hidden", value "{(trip url)}");
+            ;button(class "remove", type "submit"): x
           ==
+          ;span: {(trip url)}
         ==
       ==
     ==
