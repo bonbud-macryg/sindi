@@ -42,6 +42,16 @@
       %-  some
       :-  %sindi-items
       !>  ^-  (list item:ui)
+      =/  ft=@da
+        =/  d=date  (yore now.bowl)
+        =/  mn=@ud  m.t.d
+        %-  year
+        [[a.d y.d] m.d [d.t.d h.t.d (sub mn (mod mn 15)) 0 ~[0x0]]]
+      %-  skim
+      :_  |=  =item:ui
+          ^-  ?
+          (lte time.item ft)
+      ^-  (list item:ui)
       %-  zing
       %+  turn
         urls

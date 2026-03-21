@@ -84,7 +84,6 @@
     p.r.p:(need (de-purl:html url))
   --
 ::
-::
 ++  render-items
   |=  [=items:ui now=@da]
   ^-  marl
