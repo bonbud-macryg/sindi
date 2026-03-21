@@ -24,6 +24,30 @@
   ::
   ++  style
     '''
+    @font-face {
+      font-family: 'AdobeCaslonRegular';
+      src: url('/apps/sindi/fonts/acaslonpro-regular.woff') format('woff'),
+           url('/apps/sindi/fonts/acaslonpro-regular.woff2') format('woff2');
+      font-style: normal;
+      font-weight: normal;
+      -webkit-font-smoothing: antialiased;
+    }
+    @font-face {
+      font-family: 'AdobeCaslonItalic';
+      src: url('/apps/sindi/fonts/acaslonpro-italic.woff') format('woff'),
+           url('/apps/sindi/fonts/acaslonpro-italic.woff2') format('woff2');
+      font-style: italic;
+      font-weight: normal;
+      -webkit-font-smoothing: antialiased;
+    }
+    @font-face {
+      font-family: 'AdobeCaslonBold';
+      src: url('/apps/sindi/fonts/acaslonpro-bold.woff') format('woff'),
+           url('/apps/sindi/fonts/acaslonpro-bold.woff2') format('woff2');
+      font-style: normal;
+      font-weight: normal;
+      -webkit-font-smoothing: antialiased;
+    }
     :root {
       --color-text: #212121;
       --color-text-secondary: #c2c0b3;
@@ -31,6 +55,9 @@
       --color-background: #f9f5dc;
       --color-orange: #f09652;
       --line-height: 140%;
+      --font-regular: 'AdobeCaslonRegular', serif;
+      --font-italic: 'AdobeCaslonItalic', serif;
+      --font-bold: 'AdobeCaslonBold', serif;
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -46,11 +73,12 @@
       box-sizing: border-box;
     }
     html {
+      font-family: var(--font-regular);
       font-size: 62.5%;
       background: var(--color-background);
     }
     body {
-      font-family: serif;
+      font-family: var(--font-regular);
       font-size: 1.8em;
       background: var(--color-background);
       color: var(--color-text);
@@ -116,6 +144,7 @@
       padding: 0 3rem 2rem 2rem;
     }
     #news a {
+      font-family: var(--font-regular);
       font-style: normal;
       text-decoration: none;
       color: var(--color-text);
@@ -123,6 +152,7 @@
     #news h3:not(:empty) {
       margin-top: 2rem;
       margin-bottom: 1rem;
+      font-family: var(--font-bold);
     }
     #news li {
       margin-bottom: 0.5rem;
@@ -130,7 +160,7 @@
     #news em {
       padding: 0 0.5rem;
       color: var(--color-text-visited);
-      font-style: italic;
+      font-family: var(--font-italic);
     }
     #news a:visited,
     #news a:visited em {
