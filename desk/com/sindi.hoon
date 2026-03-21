@@ -25,18 +25,27 @@
   ^-  manx
   =/  =feeds:ui  !<(feeds:ui fil:(~(got by res.hull) %urls))
   =/  =items:ui  !<(items:ui fil:(~(got by res.hull) %items))
-  =/  base=tape  "/{(trip bas.hull)}"
+  =/  base=tape    "sindi"
+  =/  assets=tape  "/apps/sindi"
   ;html
     ;head
       ;title: Sindi
       ;meta(charset "utf-8");
       ;meta(name "viewport", content "width=device-width, initial-scale=1.0");
+      ;link(rel "manifest", href "{assets}/manifest.json");
+      ;meta(name "theme-color", content "#f9f5dc", media "(prefers-color-scheme: light)");
+      ;meta(name "theme-color", content "#212121", media "(prefers-color-scheme: dark)");
+      ;meta(name "mobile-web-app-capable", content "yes");
+      ;meta(name "apple-mobile-web-app-capable", content "yes");
+      ;meta(name "apple-mobile-web-app-title", content "Sindi");
+      ;link(rel "apple-touch-icon", href "{assets}/images/apple-touch-icon.png");
       ;style: {(trip style:ui:si)}
+      ;script: if ('serviceWorker' in navigator) navigator.serviceWorker.register('{assets}/sw.js');
     ==
     ;body
       ;section(id "nav", style "display: flex; align-items: center; gap: 1rem;")
         ;a(href "{base}", style "text-decoration: none")
-          ;h1: Sindi
+          ;img(src "{assets}/images/ring22.svg", alt "Sindi", style "height: 4rem; width: 4rem; display: block;");
         ==
         ;a(href "{base}/feeds", style "text-decoration: none")
           ;button: Feeds
