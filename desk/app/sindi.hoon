@@ -20,7 +20,15 @@
           %agent  [our.bowl q.byk.bowl]
           %poke   %mast-bind
           !>(`bind:mast`['sindi' [%sindi ~ (malt `(list (pair @tas path))`~[[%urls /rss-sub/urls] [%items /feed/items]])]])
-  ==  ==
+      ==
+      :*  %pass  /sindi/kickoff
+          %arvo  %b
+          %wait  =/  d=date  (yore now.bowl)
+                 =/  mn=@ud  m.t.d
+                 %+  add  (mul ~m1 (sub 10 (mod mn 10)))
+                 (year [[a.d y.d] m.d [d.t.d h.t.d mn 0 ~[0x0]]])
+      ==
+  ==
 ++  on-watch  |=(=path `this)
 ++  on-save   on-save:def
 ++  on-load   on-load:def
@@ -89,7 +97,20 @@
       ==
     ==
 ++  on-agent  on-agent:def
-++  on-arvo   on-arvo:def
+++  on-arvo
+  |=  [=(pole knot) =sign-arvo]
+  ^-  (quip card:agent:gall _this)
+  ?+  pole  (on-arvo:def pole sign-arvo)
+    [%sindi %kickoff ~]
+      ?>  ?=([%behn %wake *] sign-arvo)
+      :_  this
+      :~  :*  %pass   ~
+              %agent  [our.bowl q.byk.bowl]
+              %poke   %rss-sub
+              !>([%set-refresh `~m10])
+          ==
+      ==
+  ==
 ++  on-leave  on-leave:def
 ++  on-fail   on-fail:def
 --
