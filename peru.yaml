@@ -1,7 +1,18 @@
 imports:
-  rss-sub:  ./dist
-  base-dev: ./dist
-  mast-lib: ./dist
+  rss-sub:   ./dist
+  base-dev:  ./dist
+  mast-lib:  ./dist
+  landscape: ./dist
+
+git module landscape:
+  url:   https://github.com/tloncorp/landscape
+  reup:  develop
+  export: desk-dev
+  pick:
+    - desk-dev/lib/docket.hoon
+    - desk-dev/sur/docket.hoon
+    - desk-dev/mar/docket-0.hoon
+  rev: 04a25a8481582c2827162bd8b874fc524f94f6db
 
 git module mast-lib:
   url:    https://github.com/urbit/mast
