@@ -1,4 +1,4 @@
-/-  *sindi
+/-  sindi
 |%
 ++  ui
   |%
@@ -149,10 +149,9 @@
       text-decoration: none;
       color: var(--color-text);
     }
-    #news h3:not(:empty) {
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      font-family: var(--font-bold);
+    #news h3 {
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
     }
     #news li {
       margin-bottom: 0.5rem;
@@ -167,5 +166,62 @@
       color: var(--color-text-visited);
     }
     '''
+  ::
+  ++  render-items
+    |=  [=items:ui:sindi now=@da]
+    ^-  marl
+    ?~  items
+      :~  ;li: No items yet.
+      ==
+    =/  months=(list tape)
+      :~  ""
+          "January"
+          "February"
+          "March"
+          "April"
+          "May"
+          "June"
+          "July"
+          "August"
+          "September"
+          "October"
+          "November"
+          "December"
+      ==
+    =/  its=items:ui:sindi
+      %+  sort
+        items
+      |=  [a=item:ui:sindi b=item:ui:sindi]
+      (gth time.a time.b)
+    =/  prev=(unit [? @ud @ud @ud])  ~
+    |-  ^-  marl
+    ?~  its  ~
+    =/  it=item:ui:sindi  i.its
+    =/  dt=date  (yore time.it)
+    =/  this-day=[? @ud @ud @ud]  [a.dt y.dt m.dt d.t.dt]
+    =/  show-date=?
+      ?~  prev  %.y
+      !=(u.prev this-day)
+    =/  now-year=@ud  y:(yore now)
+    =/  show-year=?
+      ?~  prev  !=(y.dt now-year)
+      !=(y.dt -.+.u.prev)
+    =/  date-str=tape
+      =/  year=tape  (skim (scow %ud y.dt) |=(c=@t !=(c '.')))
+      ?.  show-year
+        (zing ~[(scow %ud d.t.dt) " " (snag m.dt months)])
+      (zing ~[(scow %ud d.t.dt) " " (snag m.dt months) " " year])
+    :_  $(its t.its, prev `this-day)
+    ;li
+      ;*  ?.  show-date  ~
+          :~  ;h3: {date-str}
+          ==
+      ;a(href "{(trip link.it)}", target "_blank", rel "noopener noreferrer")
+        ;span: {(trip title.it)}
+      ==
+      ;a(href "{(trip (uri:link src.it))}", target "_blank", rel "noopener noreferrer")
+        ;em: {(trip (hostname:link src.it))}
+      ==
+    ==
   --
 --

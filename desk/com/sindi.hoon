@@ -55,7 +55,7 @@
       ::
       ::  router
       ?+  rut.hull
-        (main-view items base)
+        (main-view items base now.hull)
           [%feeds ~]
         (feeds-view feeds base)
       ==
@@ -67,28 +67,11 @@
 ::
 ::  list of items
 ++  main-view
-  |=  [=items:ui base=tape]
+  |=  [=items:ui base=tape now=@da]
   ^-  manx
   ;article
     ;ul(id "news")
-      ;*
-      ^-  marl
-      ?~  items
-        :~  ;li: No items yet.
-        ==
-      %+  turn
-        items
-      |=  =item:ui
-      ^-  manx
-      ::  XX group by day
-      ;li
-        ;a(href "{(trip link.item)}", target "_blank", rel "noopener noreferrer")
-          ;span: {(trip title.item)}
-        ==
-        ;a(href "{(trip (uri:link:ui:si src.item))}", target "_blank", rel "noopener noreferrer")
-          ;em: {(trip (hostname:link:ui:si src.item))}
-        ==
-      ==
+      ;*  (render-items:ui:si items now)
     ==
   ==
 ::
