@@ -53,11 +53,15 @@
       ;+
       ::
       ::  router
-      ?+  rut.hull
-        (main:view items base now.hull)
-          [%feeds ~]
-        (feeds:view feeds base)
-      ==
+      ?:  =(our.hull src.hull)
+        ?+  rut.hull
+          not-found:response:view
+            ~
+          (main:view items base now.hull)
+            [%feeds ~]
+          (feeds:view feeds base)
+        ==
+      unauthorized:response:view
     ==
   ==
 --
@@ -152,6 +156,29 @@
         ;*  (render-items items now)
       ==
     ==
+  ++  response
+    |%
+    ::
+    ::  404 not found
+    ++  not-found
+      ^-  manx
+      ;article
+        ;section(id "not-found")
+          ;h2: 404
+          ;p: Not found.
+        ==
+      ==
+    ::
+    ::  401 unauthorized
+    ++  unauthorized
+      ^-  manx
+      ;article
+        ;section(id "unauthorized")
+          ;h2: 401
+          ;p: Unauthorized.
+        ==
+      ==
+    --
   ::
   ::  add/remove feeds
   ++  feeds
@@ -328,6 +355,20 @@
   #news a:visited,
   #news a:visited em {
     color: var(--color-text-visited);
+  }
+  #not-found,
+  #unauthorized {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  #not-found h2,
+  #unauthorized h2 {
+    font-family: var(--font-bold);
+  }
+  #not-found p,
+  #unauthorized p {
+    color: var(--color-text-secondary);
   }
   '''
 --
