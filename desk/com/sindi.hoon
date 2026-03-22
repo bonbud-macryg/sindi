@@ -211,8 +211,8 @@
     ;div
       ;section(id "add-feed")
         ;form(event "/submit/add-feed")
-          ;input(name "urls", type "text", placeholder "Add URLs");
-          ;button(type "submit"): Add
+          ;button(type "submit", style "white-space: pre;"): {(trip 'Add ')}
+          ;input(name "urls", type "text", placeholder "links");
         ==
       ==
       ;section(id "feeds-section")
@@ -226,11 +226,11 @@
           |=  url=@t
           ^-  manx
           ;li
+            ;span: {(trip url)}
             ;form(event "/submit/del-feed")
               ;input(name "urls", type "hidden", value "{(trip url)}");
-              ;button(class "remove", type "submit"): x
+              ;button(class "remove", type "submit", style "white-space: pre;"): {(trip ' remove')}
             ==
-            ;span: {(trip url)}
           ==
         ==
       ==
