@@ -41,7 +41,7 @@
       ;meta(name "apple-mobile-web-app-capable", content "yes");
       ;meta(name "apple-mobile-web-app-title", content "Sindi");
       ;link(rel "apple-touch-icon", href "{assets}/images/apple-touch-icon.png");
-      ;style: {(trip style)}
+      ;style: {style}
       ;script: if ('serviceWorker' in navigator) navigator.serviceWorker.register('{assets}/sw.js');
     ==
     ;body
@@ -238,6 +238,8 @@
   --
 ::
 ++  style
+  ^~
+  %-  trip
   '''
   @font-face {
     font-family: 'AdobeCaslonRegular';
