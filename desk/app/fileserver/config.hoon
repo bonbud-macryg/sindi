@@ -6,4 +6,6 @@
 ::
 ++  file-root  ^-  path
   /web
+::
+++  auth  |
 --
