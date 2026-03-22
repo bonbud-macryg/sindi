@@ -9,14 +9,17 @@
 ++  spar
   |=  cro=crow
   ^-  blow
-  =/  url=@t  (~(got by data.cro) 'url')
+  =/  urls=(list @t)
+    (split:link (~(got by data.cro) 'urls'))
   ?+  path.cro  ~
   ::
       [%submit %add-feed ~]
-    ~[[%rss-sub !>([%add-feed url])]]
+    %+  turn  urls
+    |=(url=@t [%rss-sub !>([%add-feed url])])
   ::
       [%submit %del-feed ~]
-    ~[[%rss-sub !>([%del-feed url])]]
+    %+  turn  urls
+    |=(url=@t [%rss-sub !>([%del-feed url])])
   ==
 ::
 ::  container
@@ -86,6 +89,27 @@
     %-  flop
     %-  (list @t)
     p.r.p:(need (de-purl:html url))
+  ::
+  ++  split
+    |=  links=@t
+    ^-  (list @t)
+    =/  ts=tape  (trip links)
+    =|  [acc=(list @t) cur=tape]
+    |-  ^-  (list @t)
+    ?~  ts
+      ?.  =(~ cur)
+        =/  tok=@t  (crip (flop cur))
+        ?:  =(~ (de-purl:html tok))  (flop acc)
+        (flop [tok acc])
+      (flop acc)
+    ?:  |(=(' ' i.ts) =(i.ts '\09') =(i.ts '\0a') =(i.ts '\0d'))
+      ?.  =(~ cur)
+        =/  tok=@t  (crip (flop cur))
+        ?:  =(~ (de-purl:html tok))
+          $(ts t.ts, cur ~)
+        $(ts t.ts, acc [tok acc], cur ~)
+      $(ts t.ts)
+    $(ts t.ts, cur [i.ts cur])
   --
 ::
 ++  render-items
@@ -187,7 +211,7 @@
     ;div
       ;section(id "add-feed")
         ;form(event "/submit/add-feed")
-          ;input(name "url", type "text", placeholder "Add URL");
+          ;input(name "urls", type "text", placeholder "Add URLs");
           ;button(type "submit"): Add
         ==
       ==
@@ -203,7 +227,7 @@
           ^-  manx
           ;li
             ;form(event "/submit/del-feed")
-              ;input(name "url", type "hidden", value "{(trip url)}");
+              ;input(name "urls", type "hidden", value "{(trip url)}");
               ;button(class "remove", type "submit"): x
             ==
             ;span: {(trip url)}
