@@ -28,6 +28,8 @@ git module mast-lib:
 
 git module rss-sub:
   url:    https://github.com/bonbud-macryg/rss-sub
+  reup:   main
+  export:  src
   pick:
     - src/lib/manx-utils.hoon
     - src/lib/rss-sub.hoon
@@ -44,7 +46,7 @@ git module rss-sub:
     - src/ted/atom-entry.hoon
     - src/ted/rss-atom.hoon
     - src/ted/rss-item.hoon
-  rev: 58626fd1188c6ab4177d012bc55eb543cde7d2df
+  rev: 8017a957560feacfe0af4cbd19ab2f39c706e376
 
 git module base-dev:
   url:    https://github.com/urbit/urbit
