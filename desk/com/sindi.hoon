@@ -302,6 +302,7 @@
     background: var(--color-background);
     color: var(--color-text);
     line-height: var(--line-height);
+    overflow-x: hidden;
   }
   body::-webkit-scrollbar {
     display: none;
