@@ -87,6 +87,8 @@
     %+  join
      '.'
     %-  flop
+    %-  skip
+    :_  |=(t=@t =(t 'www'))
     %-  (list @t)
     p.r.p:(need (de-purl:html url))
   ::
