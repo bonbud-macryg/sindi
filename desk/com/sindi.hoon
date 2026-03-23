@@ -252,14 +252,6 @@
     -webkit-font-smoothing: antialiased;
   }
   @font-face {
-    font-family: 'AdobeCaslonItalic';
-    src: url('/apps/sindi/fonts/acaslonpro-italic.woff') format('woff'),
-         url('/apps/sindi/fonts/acaslonpro-italic.woff2') format('woff2');
-    font-style: italic;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-  }
-  @font-face {
     font-family: 'AdobeCaslonBold';
     src: url('/apps/sindi/fonts/acaslonpro-bold.woff') format('woff'),
          url('/apps/sindi/fonts/acaslonpro-bold.woff2') format('woff2');
@@ -275,7 +267,6 @@
     --color-orange: #f09652;
     --line-height: 140%;
     --font-regular: 'AdobeCaslonRegular', serif;
-    --font-italic: 'AdobeCaslonItalic', serif;
     --font-bold: 'AdobeCaslonBold', serif;
   }
   @media (prefers-color-scheme: dark) {
@@ -379,7 +370,8 @@
   #news em {
     padding: 0 0.5rem;
     color: var(--color-text-visited);
-    font-family: var(--font-italic);
+    font-family: var(--font-regular);
+    font-style: normal;
   }
   #news a:visited,
   #news a:visited em {
