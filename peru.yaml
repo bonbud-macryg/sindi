@@ -39,6 +39,7 @@ git module rss-sub:
     - src/mar/feed/last-update.hoon
     - src/mar/feed/maximum.hoon
     - src/mar/feed/urls.hoon
+    - src/mar/feed/items.hoon
     - src/mar/rss/channel.hoon
     - src/mar/rss/item.hoon
     - src/mar/rss/items.hoon
