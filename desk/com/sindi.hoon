@@ -324,6 +324,8 @@
     max-width: 100%;
     border: none;
     padding: 0;
+    width: 90%;
+    color: var(--color-text-secondary);
   }
   button {
     color: var(--color-text);
