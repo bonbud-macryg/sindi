@@ -2,7 +2,7 @@
   "name": "Sindi",
   "short_name": "Sindi",
   "description": "RSS reader",
-  "start_url": "/sindi",
+  "start_url": "/~/login?redirect=/sindi",
   "scope": "/sindi",
   "display": "standalone",
   "background_color": "#f9f5dc",
