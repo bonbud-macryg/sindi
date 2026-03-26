@@ -224,7 +224,7 @@
           ?~  feeds
             ~
           %+  turn
-            feeds
+            (sort feeds aor)
           |=  url=@t
           ^-  manx
           ;li
