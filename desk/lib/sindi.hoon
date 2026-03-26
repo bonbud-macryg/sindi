@@ -6,15 +6,16 @@
   =/  pfx=path  /(scot %p our)/[desk]/(scot %da now)
   =/  urls  .^((list link:ui) %gx (welp pfx /rss-sub/urls/noun))
   ~&  >>  urls
-  =/  ft=@da
-    =/  d=date  (yore now)
-    =/  mn=@ud  m.t.d
-    %-  year
-    [[a.d y.d] m.d [d.t.d h.t.d (sub mn (mod mn 15)) 0 ~[0x0]]]
+  ::  =/  ft=@da
+    ::  =/  d=date  (yore now)
+    ::  =/  mn=@ud  m.t.d
+    ::  %-  year
+    ::  [[a.d y.d] m.d [d.t.d h.t.d (sub mn (mod mn 15)) 0 ~[0x0]]]
   %-  skim
   :_  |=  =item:ui
       ^-  ?
-      (lte time.item ft)
+      ::  (lte time.item ft)
+      (lte time.item now)
   ^-  (list item:ui)
   %-  zing
   %+  turn
