@@ -1,25 +1,35 @@
 /-  *sindi, ra=rss-atom
 |%
+++  m10-floor
+  |=  now=@da
+  =/  d=date  (yore now)
+  =/  mn=@ud  m.t.d
+  %+  add  (mul ~m1 (sub 10 (mod mn 10)))
+  (year [[a.d y.d] m.d [d.t.d h.t.d mn 0 ~[0x0]]])
+::
+++  m15-floor
+  |=  now=@da
+  ^-  @da
+  =/  d=date  (yore now)
+  =/  mn=@ud  m.t.d
+  %-  year
+  [[a.d y.d] m.d [d.t.d h.t.d (sub mn (mod mn 15)) 0 ~[0x0]]]
+::
+++  filter-items
+  |=  [now=@da items=(list item:ui)]
+  ^-  (list item:ui)
+  %+  skim
+    items
+  |=(=item:ui (lte time.item (m15-floor now)))
+::
 ++  fetch-feed-items
   |=  [our=@p =desk now=@da]
   ^-  (list item:ui)
   =/  pfx=path  /(scot %p our)/[desk]/(scot %da now)
-  =/  urls  .^((list link:ui) %gx (welp pfx /rss-sub/urls/noun))
-  ~&  >>  urls
-  ::  =/  ft=@da
-    ::  =/  d=date  (yore now)
-    ::  =/  mn=@ud  m.t.d
-    ::  %-  year
-    ::  [[a.d y.d] m.d [d.t.d h.t.d (sub mn (mod mn 15)) 0 ~[0x0]]]
-  %-  skim
-  :_  |=  =item:ui
-      ^-  ?
-      ::  (lte time.item ft)
-      (lte time.item now)
   ^-  (list item:ui)
   %-  zing
   %+  turn
-    urls
+    .^((list link:ui) %gx (welp pfx /rss-sub/urls/noun))
   |=  src=link:ui
   =/  feed-item
     .^  (each (set item:rss:ra) (set entry:atom:ra))

@@ -41,13 +41,10 @@
       ==
       :*  %pass  /sindi/kickoff
           %arvo  %b
-          %wait  (add ~s1 now.bowl)
-          ::  %wait  =/  d=date  (yore now.bowl)
-                 ::  =/  mn=@ud  m.t.d
-                 ::  %+  add  (mul ~m1 (sub 10 (mod mn 10)))
-                 ::  (year [[a.d y.d] m.d [d.t.d h.t.d mn 0 ~[0x0]]])
+          %wait  (add ~m10 (m10-floor now.bowl))
       ==
   ==
+::
 ++  on-watch  |=(=path `this)
 ++  on-save   !>(state)
 ++  on-poke   on-poke:def
@@ -58,6 +55,7 @@
   ?-  -.saved
     %0  [~ this(state saved)]
   ==
+::
 ++  on-peek
     |=  =(pole knot)
     ^-  (unit (unit cage))
@@ -68,7 +66,7 @@
     ::  .^(json %gx /=sindi=/sindi/items/json)
     ::  .^((list item:ui:sindi) %gx /=sindi=/sindi/items/noun)
       [%x %sindi %items ~]
-    ``[%sindi-items !>(~(tap in items))]
+    ``[%sindi-items !>((filter-items now.bowl ~(tap in items)))]
     ==
 ++  on-agent  on-agent:def
 ++  on-arvo
@@ -83,33 +81,27 @@
     :~  :*  %pass   ~
             %agent  [our.bowl q.byk.bowl]
             %poke   %rss-sub
-            !>([%set-refresh `~m1])
+            !>([%set-refresh `~m10])
         ==
         :*  %pass  /sindi/refresh
             %arvo  %b
-            %wait  (add ~m1 now.bowl)
+            %wait  (add ~m15 now.bowl)
         ==
     ==
   ::
       [%sindi %refresh ~]
     ?>  ?=([%behn %wake *] sign-arvo)
-    ::  =/  ft=@da
-      ::  =/  d=date  (yore now.bowl)
-      ::  =/  mn=@ud  m.t.d
-      ::  %-  year
-      ::  [[a.d y.d] m.d [d.t.d h.t.d (sub mn (mod mn 15)) 0 ~[0x0]]]
-    ::
     =/  new-items  (fetch-feed-items our.bowl q.byk.bowl now.bowl)
     =/  all-items  (~(gas in items) new-items)
     :_  %=  this
           items  all-items
         ==
     :~  :*  %give  %fact  ~[/x/sindi/items]
-            [%sindi-items !>(all-items)]
+            [%sindi-items !>((filter-items now.bowl ~(tap in all-items)))]
         ==
         :*  %pass  /sindi/refresh
             %arvo  %b
-            %wait  (add ~m1 now.bowl)
+            %wait  (add ~m15 (m15-floor (add ~m1 now.bowl)))
     ==  ==
   ==
 ++  on-leave  on-leave:def
