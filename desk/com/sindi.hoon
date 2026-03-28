@@ -96,12 +96,24 @@
   --
 ++  link
   |%
+  ++  trim-protocol
+    |=  url=@t
+    ^-  cord
+    =/  tu=tape  (trip url)
+    ?:  =("http://" (scag 7 tu))
+      (crip (slag 7 tu))
+    ?:  =("https://" (scag 8 tu))
+      (crip (slag 8 tu))
+    ~|  %not-a-url
+    !!
+  ::
   ++  uri
     |=  url=@t
     ^-  cord
-    ?.  =("https://" (scag 8 (trip url)))
-      (crip (welp "http://" (trip (hostname url))))
-    (crip (welp "https://" (trip (hostname url))))
+    =/  tu=tape  (trip url)
+    =/  scheme=tape
+      (scag :_(tu (sub (lent tu) (lent (trip (trim-protocol url))))))
+    (crip (welp scheme (trip (hostname url))))
   ::
   ++  hostname
     |=  url=@t
@@ -226,7 +238,7 @@
           ?~  feeds
             ~
           %+  turn
-            (sort feeds aor)
+            (sort :_(aor (turn feeds trim-protocol:link)))
           |=  url=@t
           ^-  manx
           ;li
