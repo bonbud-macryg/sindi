@@ -10,7 +10,7 @@
   |=  cro=crow
   ^-  blow
   =/  urls=(list @t)
-    (split:link (~(got by data.cro) 'urls'))
+    (split:input (~(got by data.cro) 'urls'))
   ?+  path.cro  ~
   ::
       [%submit %add-feed ~]
@@ -71,27 +71,8 @@
 ::
 |%
 ::
-++  link
+++  input
   |%
-  ++  uri
-    |=  url=@t
-    ^-  cord
-    ?.  =("https://" (scag 8 (trip url)))
-      (crip (welp "http://" (trip (hostname url))))
-    (crip (welp "https://" (trip (hostname url))))
-  ::
-  ++  hostname
-    |=  url=@t
-    ^-  cord
-    %-  crip
-    %+  join
-     '.'
-    %-  flop
-    %-  skip
-    :_  |=(t=@t =(t 'www'))
-    %-  (list @t)
-    p.r.p:(need (de-purl:html url))
-  ::
   ++  split
     |=  links=@t
     ^-  (list @t)
@@ -112,6 +93,27 @@
         $(ts t.ts, acc [tok acc], cur ~)
       $(ts t.ts)
     $(ts t.ts, cur [i.ts cur])
+  --
+++  link
+  |%
+  ++  uri
+    |=  url=@t
+    ^-  cord
+    ?.  =("https://" (scag 8 (trip url)))
+      (crip (welp "http://" (trip (hostname url))))
+    (crip (welp "https://" (trip (hostname url))))
+  ::
+  ++  hostname
+    |=  url=@t
+    ^-  cord
+    %-  crip
+    %+  join
+     '.'
+    %-  flop
+    %-  skip
+    :_  |=(t=@t =(t 'www'))
+    %-  (list @t)
+    p.r.p:(need (de-purl:html url))
   --
 ::
 ++  render-items
