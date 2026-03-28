@@ -172,8 +172,7 @@
     !=(u.prev this-day)
   =/  now-year=@ud  y:(yore now)
   =/  show-year=?
-    ?~  prev  !=(y.dt now-year)
-    !=(y.dt -.+.u.prev)
+    !=(y.dt now-year)
   =/  date-str=tape
     =/  year=tape  (skim (scow %ud y.dt) |=(c=@t !=(c '.')))
     ?.  show-year
