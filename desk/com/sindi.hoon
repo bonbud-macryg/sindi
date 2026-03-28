@@ -47,7 +47,7 @@
     ;body
       ;section(id "nav", style "display: flex; align-items: center; gap: 1rem;")
         ;a(href "{base}", style "text-decoration: none")
-          ;img(src "{assets}/images/ring22.svg", alt "Sindi", style "height: 4rem; width: 4rem; display: block;");
+          ;img(src "{assets}/images/ring22.svg", alt "Sindi", style "height: 3rem; width: 3rem; display: block;");
         ==
         ;a(href "{base}/feeds", style "text-decoration: none")
           ;button: Feeds
