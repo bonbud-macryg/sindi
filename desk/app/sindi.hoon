@@ -92,7 +92,23 @@
       [%sindi %refresh ~]
     ?>  ?=([%behn %wake *] sign-arvo)
     =/  new-items  (fetch-feed-items our.bowl q.byk.bowl now.bowl)
-    =/  all-items  (~(gas in items) new-items)
+    ::
+    ::  guard against saving the same
+    ::  item twice with two headlines
+    =/  deduplicated-items
+      %+  murn
+        new-items
+      |=  =item:ui
+      ^-  (unit item:ui)
+      ?.  %+  levy
+            new-items
+          |=  other=item:ui
+          ?|  !=(link.other link.item)
+              (gte time.other time.item)
+          ==
+        ~
+      `item
+    =/  all-items  (~(gas in items) deduplicated-items)
     :_  %=  this
           items  all-items
         ==
