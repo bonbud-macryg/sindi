@@ -107,6 +107,14 @@
     ~|  %not-a-url
     !!
   ::
+  ++  trim-www
+    |=  url=@t
+    ^-  cord
+    =/  tu=tape  (trip url)
+    ?.  =("www." (scag 4 tu))
+      url
+    (crip (slag 4 tu))
+  ::
   ++  uri
     |=  url=@t
     ^-  cord
@@ -118,12 +126,11 @@
   ++  hostname
     |=  url=@t
     ^-  cord
+    %-  trim-www
     %-  crip
     %+  join
      '.'
     %-  flop
-    %-  skip
-    :_  |=(t=@t =(t 'www'))
     %-  (list @t)
     p.r.p:(need (de-purl:html url))
   --
@@ -238,7 +245,7 @@
           ?~  feeds
             ~
           %+  turn
-            (sort :_(aor (turn feeds trim-protocol:link)))
+            (sort :_(aor (turn :_(trim-www:link (turn feeds trim-protocol:link)))))
           |=  url=@t
           ^-  manx
           ;li
