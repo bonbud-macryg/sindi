@@ -47,7 +47,7 @@ git module rss-sub:
     - src/ted/atom-entry.hoon
     - src/ted/rss-atom.hoon
     - src/ted/rss-item.hoon
-  rev: 2da62c285a88597a727ef3303c4d9eb1441b506c
+  rev: 3c9e5b632adf462142c25e5146566421b09dd776
 
 git module base-dev:
   url:    https://github.com/urbit/urbit
