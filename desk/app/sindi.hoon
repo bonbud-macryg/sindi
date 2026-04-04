@@ -67,6 +67,17 @@
     ::  .^((list item:ui:sindi) %gx /=sindi=/sindi/items/noun)
       [%x %sindi %items ~]
     ``[%sindi-items !>((filter-items now.bowl ~(tap in items)))]
+    ::
+    ::  .^(mime %gx /=sindi=/sindi/icon/mime)
+      [%x %sindi %icon ~]
+    =/  svg=@t
+      .^  @t
+          %cx
+          %+  welp
+            /(scot %p our.bowl)/[q.byk.bowl]/(scot %da now.bowl)
+          /web/images/ring22/svg
+      ==
+    ``[%mime !>([~['image' 'svg+xml'] [(met 3 svg) svg]])]
     ==
 ++  on-agent  on-agent:def
 ++  on-arvo
