@@ -15,6 +15,20 @@
   %-  year
   [[a.d y.d] m.d [d.t.d h.t.d (sub mn (mod mn 15)) 0 ~[0x0]]]
 ::
+++  icon-name
+  |=  now=@da
+  ^-  @ta
+  =/  d=date    (yore (m15-floor now))
+  =/  step=@ud  (add (mul (mod h.t.d 4) 4) (div m.t.d 15))
+  =/  icons=(list @ta)
+  :~  %ring22  %ring23  %ring24  %ring21
+      %ring12  %ring13  %ring14
+      %ring41  %ring42  %ring43
+      %ring34  %ring31  %ring32
+      %ring23  %ring24  %ring21
+  ==
+  (snag step icons)
+::
 ++  filter-items
   |=  [now=@da items=(list item:ui)]
   ^-  (list item:ui)

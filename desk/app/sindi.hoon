@@ -34,7 +34,8 @@
               ~
               %-  malt
               ^-  (list (pair @tas path))
-              :~  [%items /sindi/items]
+              :~  [%icon /sindi/icon]
+                  [%items /sindi/items]
                   [%urls /rss-sub/urls]
               ==
           ==
@@ -74,8 +75,8 @@
       .^  @t
           %cx
           %+  welp
-            /(scot %p our.bowl)/[q.byk.bowl]/(scot %da now.bowl)
-          /web/images/ring22/svg
+            /(scot %p our.bowl)/[q.byk.bowl]/(scot %da now.bowl)/web/images
+          /[(icon-name now.bowl)]/svg
       ==
     ``[%mime !>([~['image' 'svg+xml'] [(met 3 svg) svg]])]
     ==
@@ -120,6 +121,13 @@
         ~
       `item
     =/  all-items  (~(gas in items) deduplicated-items)
+    =/  icon-svg=@t
+      .^  @t
+          %cx
+          %+  welp
+            /(scot %p our.bowl)/[q.byk.bowl]/(scot %da now.bowl)/web/images
+          /[(icon-name now.bowl)]/svg
+      ==
     :_  %=  this
           items  all-items
         ==
@@ -129,6 +137,13 @@
         :*  %pass  /sindi/refresh
             %arvo  %b
             %wait  (add ~m15 (m15-floor (add ~m1 now.bowl)))
+        ==
+        :*  %give  %fact  ~[/x/sindi/icon]
+            :-  %mime
+            !>  ^-  mime
+            :+    ~['image' 'svg+xml']
+                (met 3 icon-svg)
+            icon-svg
     ==  ==
   ==
 ++  on-leave  on-leave:def

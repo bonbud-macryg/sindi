@@ -1,7 +1,7 @@
 /-  *mast, *sindi
 ^-  mast
 =<
-:-  ~[[%urls %feed-urls] [%items %sindi-items]]
+:-  ~[[%urls %feed-urls] [%items %sindi-items] [%icon %sindi-icon]]
 ^|
 |_  =hull
 ::
@@ -27,6 +27,7 @@
   ^-  manx
   =/  =feeds:ui  !<(feeds:ui fil:(~(got by res.hull) %urls))
   =/  =items:ui  !<(items:ui fil:(~(got by res.hull) %items))
+  =/  icon       !<(@t fil:(~(got by res.hull) %icon))
   =/  base=tape    "/sindi"
   =/  assets=tape  "/apps/sindi"
   ;html
@@ -47,7 +48,7 @@
     ;body
       ;section(id "nav", style "display: flex; align-items: center; gap: 1rem;")
         ;a(href "{base}", style "text-decoration: none")
-          ;img(src "/~/scry/sindi/sindi/icon.mime", alt "Sindi", style "height: 3rem; width: 3rem; display: block;");
+          ;+  (render-icon icon)
         ==
         ;a(href "{base}/feeds", style "text-decoration: none")
           ;button: Feeds
@@ -134,6 +135,22 @@
     %-  (list @t)
     p.r.p:(need (de-purl:html url))
   --
+::
+++  render-icon
+  |=  svg=@t
+  ^-  manx
+  =/  tu=tape  (trip svg)
+  =/  start=(unit @ud)  (find "<svg" tu)
+  ?~  start
+    ;span(style "height: 3rem; width: 3rem; display: block;");
+  =/  svg-tape=tape  (slag u.start tu)
+  =/  parsed=(unit manx)  (de-xml:html (crip svg-tape))
+  ?~  parsed
+    ;span(style "height: 3rem; width: 3rem; display: block;");
+  =/  =manx  u.parsed
+  %_  manx
+    a.g  [[%style "height: 3rem; width: 3rem; display: block;"] a.g.manx]
+  ==
 ::
 ++  render-items
   |=  [=items:ui now=@da]
