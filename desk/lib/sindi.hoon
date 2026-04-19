@@ -15,6 +15,16 @@
   %-  year
   [[a.d y.d] m.d [d.t.d h.t.d (sub mn (mod mn 15)) 0 ~[0x0]]]
 ::
+++  next-rss-refresh
+  ::  next XX:10, XX:25, XX:40, or XX:55 (5 min before each UI refresh)
+  |=  now=@da
+  ^-  @da
+  =/  floor  (m15-floor now)
+  =/  candidate  (add floor ~m10)
+  ?:  (gth candidate now)
+    candidate
+  (add floor ~m25)
+::
 ++  icon-name
   |=  now=@da
   ^-  @ta

@@ -90,18 +90,31 @@
       [%sindi %kickoff ~]
     ?>  ?=([%behn %wake *] sign-arvo)
     :_  this
-    :~  :*  %pass   ~
-            %agent  [our.bowl q.byk.bowl]
-            %poke   %rss-sub
-            !>([%set-refresh `~m10])
+    :~  :*  %pass  /sindi/rss-refresh
+            %arvo  %b
+            %wait  (next-rss-refresh now.bowl)
         ==
-        :*  %pass  /sindi/refresh
+        :*  %pass  /sindi/ui-refresh
             %arvo  %b
             %wait  (add ~m15 now.bowl)
         ==
     ==
   ::
-      [%sindi %refresh ~]
+      [%sindi %rss-refresh ~]
+    ?>  ?=([%behn %wake *] sign-arvo)
+    :_  this
+    :~  :*  %pass   ~
+            %agent  [our.bowl q.byk.bowl]
+            %poke   %rss-sub
+            !>([%refresh-now ~])
+        ==
+        :*  %pass  /sindi/rss-refresh
+            %arvo  %b
+            %wait  (next-rss-refresh now.bowl)
+        ==
+    ==
+  ::
+      [%sindi %ui-refresh ~]
     ?>  ?=([%behn %wake *] sign-arvo)
     =/  new-items  (fetch-feed-items our.bowl q.byk.bowl now.bowl)
     ::
@@ -134,7 +147,7 @@
     :~  :*  %give  %fact  ~[/x/sindi/items]
             [%sindi-items !>((filter-items now.bowl ~(tap in all-items)))]
         ==
-        :*  %pass  /sindi/refresh
+        :*  %pass  /sindi/ui-refresh
             %arvo  %b
             %wait  (add ~m15 (m15-floor (add ~m1 now.bowl)))
         ==
