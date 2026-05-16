@@ -204,10 +204,15 @@
     ?~  prev  %.y
     !=(u.prev this-day)
   =/  now-year=@ud  y:(yore now)
+  =/  now-dt=date  (yore now)
+  =/  is-today=?
+    =([a.now-dt y.now-dt m.now-dt d.t.now-dt] this-day)
   =/  show-year=?
     !=(y.dt now-year)
   =/  date-str=tape
     =/  year=tape  (skim (scow %ud y.dt) |=(c=@t !=(c '.')))
+    ?:  is-today
+      (zing ~["Today, " (scow %ud d.t.dt) " " (snag m.dt months)])
     ?.  show-year
       (zing ~[(scow %ud d.t.dt) " " (snag m.dt months)])
     (zing ~[(scow %ud d.t.dt) " " (snag m.dt months) " " year])
