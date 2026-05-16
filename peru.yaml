@@ -58,6 +58,7 @@ git module base-dev:
     - pkg/base-dev/lib/default-agent.hoon
     - pkg/base-dev/lib/skeleton.hoon
     - pkg/base-dev/lib/verb.hoon
+    - pkg/base-dev/mar/txt.hoon
     - pkg/base-dev/mar/bill.hoon
     - pkg/base-dev/mar/hoon.hoon
     - pkg/base-dev/mar/kelvin.hoon
