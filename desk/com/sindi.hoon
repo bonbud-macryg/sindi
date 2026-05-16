@@ -43,6 +43,7 @@
       ;meta(name "apple-mobile-web-app-title", content "Sindi");
       ;link(rel "apple-touch-icon", href "{assets}/images/apple-touch-icon.png");
       ;style: {style}
+      ;script: {script}
       ;script: if ('serviceWorker' in navigator) navigator.serviceWorker.register('{assets}/sw.js');
     ==
     ;body
@@ -156,7 +157,22 @@
   |=  [=items:ui now=@da]
   ^-  marl
   ?~  items
-    :~  ;li: No items yet.
+    :~  ;li
+          ;span(class "sindi-empty-copy"): This is Sindi, a calm RSS aggregator
+          ;em(class "sindi-empty-host"): your-url.com
+        ==
+        ;li
+          ;span(class "sindi-empty-copy"): It refreshes every fifteen minutes
+          ;em(class "sindi-empty-host"): your-url.com
+        ==
+        ;li
+          ;span(class "sindi-empty-copy"): Click "Feeds" to add some feeds
+          ;em(class "sindi-empty-host"): your-url.com
+        ==
+        ;li
+          ;span(class "sindi-empty-copy"): Click the icon to see headlines
+          ;em(class "sindi-empty-host"): your-url.com
+        ==
     ==
   =/  months=(list tape)
     :~  ""
@@ -416,6 +432,12 @@
   #news a:visited em {
     color: var(--color-text-visited);
   }
+  .sindi-empty-copy {
+    color: var(--color-text);
+  }
+  #news a:visited .sindi-empty-copy {
+    color: var(--color-text);
+  }
   #not-found,
   #unauthorized {
     display: flex;
@@ -430,5 +452,17 @@
   #unauthorized p {
     color: var(--color-text-secondary);
   }
+  '''
+::
+++  script
+  ^~
+  %-  trip
+  '''
+  document.addEventListener('DOMContentLoaded', () => {
+    const host = window.location.hostname.replace(/^www\./, '');
+    document.querySelectorAll('.sindi-empty-host').forEach((el) => {
+      el.textContent = host;
+    });
+  });
   '''
 --
