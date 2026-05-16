@@ -47,14 +47,7 @@
       ;script: if ('serviceWorker' in navigator) navigator.serviceWorker.register('{assets}/sw.js');
     ==
     ;body
-      ;section(id "nav", style "display: flex; align-items: center; gap: 1rem;")
-        ;a(href "{base}", style "text-decoration: none")
-          ;+  (render-icon icon)
-        ==
-        ;a(href "{base}/feeds", style "text-decoration: none")
-          ;button: Feeds
-        ==
-      ==
+      ;+  (render-nav base icon)
       ;+
       ::
       ::  router
@@ -151,6 +144,18 @@
   =/  =manx  u.parsed
   %_  manx
     a.g  [[%style "height: 3rem; width: 3rem; display: block;"] a.g.manx]
+  ==
+::
+++  render-nav
+  |=  [base=tape icon=@t]
+  ^-  manx
+  ;nav(id "nav")
+    ;a(href "{base}", style "text-decoration: none")
+      ;+  (render-icon icon)
+    ==
+    ;a(href "{base}/feeds", style "text-decoration: none")
+      ;button: Feeds
+    ==
   ==
 ::
 ++  render-items
@@ -352,6 +357,7 @@
     color: var(--color-text);
     line-height: var(--line-height);
     overflow-x: hidden;
+    padding-top: 6rem;
   }
   body::-webkit-scrollbar {
     display: none;
@@ -393,11 +399,19 @@
   section {
     margin: 2rem;
   }
-  nav {
+  #nav {
     display: flex;
     align-items: center;
+    gap: 1rem;
     height: 6rem;
-    padding: 0 1rem;
+    padding: 0 1rem 0 calc(1rem + 10px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background:
+      linear-gradient(to bottom, var(--color-background) calc(100% - 10px), transparent 100%);
   }
   #feeds {
     white-space: nowrap;
