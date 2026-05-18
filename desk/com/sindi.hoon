@@ -110,6 +110,14 @@
       url
     (crip (slag 4 tu))
   ::
+  ++  trim-trailing-slash
+    |=  url=@t
+    ^-  cord
+    =/  tu=tape  (trip url)
+    ?.  =('/' (rear tu))
+      url
+    (crip (snip tu))
+  ::
   ++  uri
     |=  url=@t
     ^-  cord
@@ -287,7 +295,15 @@
           ?~  feeds
             ~
           %+  turn
-            (sort :_(aor (turn :_(trim-www:link (turn feeds trim-protocol:link)))))
+            %-  sort
+            :_  aor
+            %+  turn
+              feeds
+            |=  url=link:ui
+            %-  trim-trailing-slash:link
+            %-  trim-www:link
+            %-  trim-protocol:link
+            url
           |=  url=@t
           ^-  manx
           ;li
