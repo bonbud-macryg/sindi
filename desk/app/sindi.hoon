@@ -60,7 +60,6 @@
 ++  on-peek
     |=  =(pole knot)
     ^-  (unit (unit cage))
-    ~&  >>  pole
     ?+  pole
       (on-peek:def pole)
     ::
