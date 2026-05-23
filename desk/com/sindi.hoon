@@ -20,6 +20,12 @@
       [%submit %del-feed ~]
     %+  turn  urls
     |=(url=@t [%rss-sub !>([%del-feed url])])
+  ::
+      [%click %mark-as-read ~]
+    :~  :-  %sindi-action
+        !>  ^-  action
+        [%mark-read (~(got by data.cro) 'target/href')]
+    ==
   ==
 ::
 ::  container
@@ -234,10 +240,10 @@
     ;*  ?.  show-date  ~
         :~  ;h3: {date-str}
         ==
-    ;a(href "{(trip link.it)}", target "_blank", rel "noopener noreferrer")
+    ;a(href "{(trip link.it)}", target "_blank", rel "noopener noreferrer", event "/click/mark-as-read", return "/target/href")
       ;span: {(trip title.it)}
     ==
-    ;a(href "{(trip (uri:link src.it))}", target "_blank", rel "noopener noreferrer")
+    ;a(href "{(trip (uri:link src.it))}", target "_blank", rel "noopener noreferrer", event "/click/mark-as-read", return "/target/href")
       ;em: {(trip (hostname:link src.it))}
     ==
   ==

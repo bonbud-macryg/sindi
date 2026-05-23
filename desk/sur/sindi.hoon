@@ -1,4 +1,8 @@
 |%
++$  action
+  $%  [%mark-read =link:ui]
+  ==
+::
 ++  ui
   |%
   +$  link   @t
@@ -6,6 +10,7 @@
   +$  items  (list item)
   +$  item
     $:  title=@t
+        read=?
         src=@t
         =time
         =link

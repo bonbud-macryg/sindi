@@ -19,6 +19,7 @@
         ['source' s+src.item]
         ['published' (sect:enjs time.item)]
         ['url' s+link.item]
+        ['read' b+read.item]
     ==
   --
 ++  grad  %noun

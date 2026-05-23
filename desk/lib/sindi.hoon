@@ -69,10 +69,12 @@
     =/  ttl  (murn elems |=(e=item-element:rss:ra ?.(?=([%title *] e) ~ `p.e)))
     =/  lnk  (murn elems |=(e=item-element:rss:ra ?.(?=([%link *] e) ~ `p.e)))
     =/  pub  (murn elems |=(e=item-element:rss:ra ?.(?=([%pub-date *] e) ~ `p.e)))
-    :^  ?~(ttl '' i.ttl)
+    :*  ?~(ttl '' i.ttl)
+        .n
         src
         ?~(pub now i.pub)
-    ?~(lnk '' i.lnk)
+        ?~(lnk '' i.lnk)
+    ==
       %|
     %+  turn  ~(tap in p.feed-item)
     |=  =entry:atom:ra
@@ -81,9 +83,11 @@
     =/  ttl  (murn elems |=(e=entry-element:atom:ra ?.(?=([%title *] e) ~ `p.e)))
     =/  lnk  (murn elems |=(e=entry-element:atom:ra ?.(?=([%link *] e) ~ `p.e)))
     =/  pub  (murn elems |=(e=entry-element:atom:ra ?.(?=([%updated *] e) ~ `p.e)))
-    :^  ?~(ttl '' i.ttl)
+    :*  ?~(ttl '' i.ttl)
+        .n
         src
         ?~(pub now i.pub)
-    ?~(lnk '' i.lnk)
+        ?~(lnk '' i.lnk)
+    ==
   ==
 --

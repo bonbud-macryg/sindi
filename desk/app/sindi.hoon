@@ -48,13 +48,42 @@
 ::
 ++  on-watch  |=(=path `this)
 ++  on-save   !>(state)
-++  on-poke   on-poke:def
+::
 ++  on-load
   |=  old=vase
   ^-  (quip card _this)
   =/  saved  !<(versioned-state old)
   ?-  -.saved
     %0  [~ this(state saved)]
+  ==
+::
+++  on-poke
+  |=  [=mark =vase]
+  ^-  (quip card _this)
+  ?+    mark  (on-poke:def mark vase)
+      %sindi-action
+    =/  act  !<(action vase)
+    =/  updated-items=(set item:ui)
+      %-  silt
+      %+  turn
+        ~(tap in items)
+      |=  =item:ui
+      ?.  =(link.act link.item)
+        item
+      item(read .y)
+    ?-  -.act
+        %mark-read
+      :_  %=  this
+            items  updated-items
+          ==
+      :~  :*  %give  %fact  ~[/x/sindi/items]
+              :-  %sindi-items
+              !>  ^-  (list item:ui)
+              %+  filter-items
+                now.bowl
+              ~(tap in updated-items)
+      ==  ==
+    ==
   ==
 ::
 ++  on-peek
@@ -115,7 +144,24 @@
   ::
       [%sindi %ui-refresh ~]
     ?>  ?=([%behn %wake *] sign-arvo)
-    =/  new-items  (fetch-feed-items our.bowl q.byk.bowl now.bowl)
+    ::
+    ::  mark new items as read if
+    ::  we've clicked this link already
+    =/  new-items
+      %+  turn
+        (fetch-feed-items our.bowl q.byk.bowl now.bowl)
+      |=  it=item:ui
+      %=  it
+        read  %.  link.it
+              %~  has  in
+              %-  silt
+              %+  murn
+                ~(tap in items)
+              |=  it=item:ui
+              ?.  read.it
+                ~
+              `link.it
+      ==
     ::
     ::  guard against saving the same
     ::  item twice with two headlines
