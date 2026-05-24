@@ -55,11 +55,22 @@
   %+  turn
     .^((list link:ui) %gx (welp pfx /rss-sub/urls/noun))
   |=  src=link:ui
+  (fetch-feed-items-for-link our desk now src)
+::
+++  fetch-feed-items-for-link
+  |=  [our=@p =desk now=@da src=link:ui]
+  ^-  (list item:ui)
+  =/  pfx=path  /(scot %p our)/[desk]/(scot %da now)
   =/  feed-item
     .^  (each (set item:rss:ra) (set entry:atom:ra))
         %gx
         (welp pfx /rss-sub/feed/items/(scot %t src)/noun)
     ==
+  (feed-items-to-ui src now feed-item)
+::
+++  feed-items-to-ui
+  |=  [src=link:ui now=@da feed-item=(each (set item:rss:ra) (set entry:atom:ra))]
+  ^-  (list item:ui)
   ?-  -.feed-item
       %&
     %+  turn  ~(tap in p.feed-item)

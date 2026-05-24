@@ -6,7 +6,7 @@
   $%  state-0
   ==
 ::
-+$  state-0  [%0 items=(set item:ui)]
++$  state-0  [%0 feeds=(map link:ui (set item:ui))]
 ::
 +$  card  card:agent:gall
 --
@@ -35,10 +35,14 @@
               %-  malt
               ^-  (list (pair @tas path))
               :~  [%icon /sindi/icon]
+                  [%urls /sindi/urls]
                   [%items /sindi/items]
-                  [%urls /rss-sub/urls]
               ==
           ==
+      ==
+      :*  %pass   /sindi/feeds-sub
+          %agent  [our.bowl q.byk.bowl]
+          %watch  /rss-sub/feeds
       ==
       :*  %pass  /sindi/kickoff
           %arvo  %b
@@ -63,25 +67,30 @@
   ?+    mark  (on-poke:def mark vase)
       %sindi-action
     =/  act  !<(action vase)
-    =/  updated-items=(set item:ui)
-      %-  silt
-      %+  turn
-        ~(tap in items)
-      |=  =item:ui
-      ?.  =(link.act link.item)
-        item
-      item(read .y)
-    ?-  -.act
+    ?-    -.act
         %mark-read
+      =/  updated-feeds=(map link:ui (set item:ui))
+        %-  ~(gas by *(map link:ui (set item:ui)))
+        %+  turn
+          ~(tap by feeds)
+        |=  [src=link:ui src-items=(set item:ui)]
+        :-  src
+        %-  silt
+        %+  turn
+          ~(tap in src-items)
+        |=  =item:ui
+        ?.  =(link.act link.item)
+          item
+        item(read .y)
       :_  %=  this
-            items  updated-items
+            feeds  updated-feeds
           ==
       :~  :*  %give  %fact  ~[/x/sindi/items]
               :-  %sindi-items
               !>  ^-  (list item:ui)
               %+  filter-items
                 now.bowl
-              ~(tap in updated-items)
+              (fetch-feed-items our.bowl q.byk.bowl now.bowl)
       ==  ==
     ==
   ==
@@ -95,7 +104,18 @@
     ::  .^(json %gx /=sindi=/sindi/items/json)
     ::  .^((list item:ui:sindi) %gx /=sindi=/sindi/items/noun)
       [%x %sindi %items ~]
-    ``[%sindi-items !>((filter-items now.bowl ~(tap in items)))]
+    %-  some
+    %-  some
+    :-  %sindi-items
+    !>  ^-  (list item:ui)
+    %+  filter-items
+      now.bowl
+    (fetch-feed-items our.bowl q.byk.bowl now.bowl)
+    ::
+    ::  .^(json %gx /=sindi=/sindi/urls/json)
+    ::  .^((list link:ui:sindi) %gx /=sindi=/sindi/urls/noun)
+      [%x %sindi %urls ~]
+    ``feed-urls+!>(~(tap in ~(key by feeds)))
     ::
     ::  .^(mime %gx /=sindi=/sindi/icon/mime)
       [%x %sindi %icon ~]
@@ -108,7 +128,40 @@
       ==
     ``[%mime !>([~['image' 'svg+xml'] [(met 3 svg) svg]])]
     ==
-++  on-agent  on-agent:def
+::
+++  on-agent
+  |=  [=(pole knot) =sign:agent:gall]
+  ^-  (quip card _this)
+  ?+    pole  (on-agent:def pole sign)
+      [%sindi %feeds-sub ~]
+    ?.  ?=(%fact -.sign)
+      `this
+    =/  upd  !<(rss-sub-update:rs:rss-sub q.cage.sign)
+    ?-    -.upd
+        %feed-added
+      =/  new-feeds  (~(put by feeds) link.upd ~)
+      :_  this(feeds new-feeds)
+      :~  :*  %give  %fact  ~[/x/sindi/urls]
+              [%feed-urls !>(~(tap in ~(key by new-feeds)))]
+          ==
+      ==
+    ::
+        %feed-deleted
+      =/  new-feeds  (~(del by feeds) link.upd)
+      :_  this(feeds new-feeds)
+      :~  :*  %give  %fact  ~[/x/sindi/items]
+              :-  %sindi-items
+              !>  ^-  (list item:ui)
+              %+  filter-items
+                now.bowl
+              (fetch-feed-items our.bowl q.byk.bowl now.bowl)
+          ==
+          :*  %give  %fact  ~[/x/sindi/urls]
+              feed-urls+!>(~(tap in ~(key by new-feeds)))
+          ==
+      ==
+    ==
+  ==
 ++  on-arvo
   |=  [=(pole knot) =sign-arvo]
   ^-  (quip card _this)
@@ -144,24 +197,8 @@
   ::
       [%sindi %ui-refresh ~]
     ?>  ?=([%behn %wake *] sign-arvo)
-    ::
-    ::  mark new items as read if
-    ::  we've clicked this link already
     =/  new-items
-      %+  turn
-        (fetch-feed-items our.bowl q.byk.bowl now.bowl)
-      |=  it=item:ui
-      %=  it
-        read  %.  link.it
-              %~  has  in
-              %-  silt
-              %+  murn
-                ~(tap in items)
-              |=  it=item:ui
-              ?.  read.it
-                ~
-              `link.it
-      ==
+      (fetch-feed-items our.bowl q.byk.bowl now.bowl)
     ::
     ::  guard against saving the same
     ::  item twice with two headlines
@@ -178,7 +215,18 @@
           ==
         ~
       `item
-    =/  all-items  (~(gas in items) deduplicated-items)
+    =/  all-items  (silt deduplicated-items)
+    =/  new-feeds
+      %-  ~(gas by *(map link:ui (set item:ui)))
+      %+  turn
+        ~(tap in ~(key by feeds))
+      |=  src=link:ui
+      :-  src
+      %-  silt
+      %+  murn
+        deduplicated-items
+      |=  =item:ui
+      ?.(=(src.item src) ~ `item)
     =/  icon-svg=@t
       .^  @t
           %cx
@@ -187,7 +235,7 @@
           /[(icon-name now.bowl)]/svg
       ==
     :_  %=  this
-          items  all-items
+          feeds  new-feeds
         ==
     :~  :*  %give  %fact  ~[/x/sindi/items]
             [%sindi-items !>((filter-items now.bowl ~(tap in all-items)))]
