@@ -40,7 +40,7 @@
               ==
           ==
       ==
-      :*  %pass   /sindi/feeds-sub
+      :*  %pass   /update/feeds
           %agent  [our.bowl q.byk.bowl]
           %watch  /rss-sub/feeds
       ==
@@ -90,7 +90,7 @@
               !>  ^-  (list item:ui)
               %+  filter-items
                 now.bowl
-              (fetch-feed-items our.bowl q.byk.bowl now.bowl)
+              (list-all-items feeds)
       ==  ==
     ==
   ==
@@ -104,13 +104,13 @@
     ::  .^(json %gx /=sindi=/sindi/items/json)
     ::  .^((list item:ui:sindi) %gx /=sindi=/sindi/items/noun)
       [%x %sindi %items ~]
-    %-  some
-    %-  some
-    :-  %sindi-items
-    !>  ^-  (list item:ui)
-    %+  filter-items
-      now.bowl
-    (fetch-feed-items our.bowl q.byk.bowl now.bowl)
+      %-  some
+      %-  some
+      :-  %sindi-items
+      !>  ^-  (list item:ui)
+      %+  filter-items
+        now.bowl
+      (list-all-items feeds)
     ::
     ::  .^(json %gx /=sindi=/sindi/urls/json)
     ::  .^((list link:ui:sindi) %gx /=sindi=/sindi/urls/noun)
@@ -133,32 +133,102 @@
   |=  [=(pole knot) =sign:agent:gall]
   ^-  (quip card _this)
   ?+    pole  (on-agent:def pole sign)
-      [%sindi %feeds-sub ~]
-    ?.  ?=(%fact -.sign)
-      `this
-    =/  upd  !<(rss-sub-update:rs:rss-sub q.cage.sign)
-    ?-    -.upd
-        %feed-added
-      =/  new-feeds  (~(put by feeds) link.upd ~)
-      :_  this(feeds new-feeds)
-      :~  :*  %give  %fact  ~[/x/sindi/urls]
-              [%feed-urls !>(~(tap in ~(key by new-feeds)))]
+      [%update %feeds ~]
+    ?+    -.sign  (on-agent:def pole sign)
+        %fact
+      ?+    p.cage.sign  (on-agent:def pole sign)
+          %rss-sub-update
+        =/  upd  !<(rss-sub-update:rs:rss-sub q.cage.sign)
+        ?-    -.upd
+            %feed-added
+          :_  this
+          :~  :*  %pass   /update/feed/(scot %t link.upd)
+                  %agent  [our.bowl q.byk.bowl]
+                  %watch  /rss-sub/feed/(scot %t link.upd)
+          ==  ==
+        ::
+            %feed-deleted
+          :_  this(feeds (~(del by feeds) link.upd))
+          :~  :*  %give  %fact  ~[/x/sindi/urls]
+                  feed-urls+!>(~(tap in ~(key by (~(del by feeds) link.upd))))
+              ==
           ==
+        ==
       ==
+    ==
+  ::
+      [%update %feed link=@ta ~]
+    ?+    -.sign  (on-agent:def pole sign)
+        %watch-ack
+      :_  %=  this
+            feeds  (~(put by feeds) [(slav %t link.pole) *(set item:ui)])
+          ==
+      :~  :*  %give  %fact  ~[/x/sindi/urls]
+              :-  %feed-urls
+              !>(:-((slav %t link.pole) ~(tap in ~(key by feeds))))
+      ==  ==
     ::
-        %feed-deleted
-      =/  new-feeds  (~(del by feeds) link.upd)
-      :_  this(feeds new-feeds)
-      :~  :*  %give  %fact  ~[/x/sindi/items]
-              :-  %sindi-items
-              !>  ^-  (list item:ui)
-              %+  filter-items
-                now.bowl
-              (fetch-feed-items our.bowl q.byk.bowl now.bowl)
+        %fact
+      ?+    p.cage.sign  (on-agent:def pole sign)
+          %rss-item
+        =/  src=link:ui   (slav %t link.pole)
+        =/  =item:rss:ra  !<(item:rss:ra q.cage.sign)
+        =/  existing-items=(unit (set item:ui))
+          (~(get by feeds) src)
+        =/  incoming-items=(list item:ui)
+          %:  feed-items-to-ui
+              src
+              now.bowl
+              :-  %&
+              (~(put in *(set item:rss:ra)) item)
           ==
-          :*  %give  %fact  ~[/x/sindi/urls]
-              feed-urls+!>(~(tap in ~(key by new-feeds)))
+        =/  updated-items=(set item:ui)
+          %-  silt
+          %+  welp
+            incoming-items
+          ?~  existing-items
+            ~
+          ~(tap in u.existing-items)
+        ::
+        :_  this(feeds (~(put by feeds) src updated-items))
+        :~  :*  %give  %fact  ~[/x/sindi/items]
+                :-  %sindi-items
+                !>  ^-  (list item:ui)
+                %+  filter-items
+                  now.bowl
+                ~(tap in updated-items)
+            ==
+        ==
+      ::
+          %atom-entry
+        =/  src=link:ui     (slav %t link.pole)
+        =/  =entry:atom:ra  !<(entry:atom:ra q.cage.sign)
+        =/  existing-items=(unit (set item:ui))
+          (~(get by feeds) src)
+        =/  incoming-items=(list item:ui)
+          %:  feed-items-to-ui
+              src
+              now.bowl
+              :-  %|
+              (~(put in *(set entry:atom:ra)) entry)
           ==
+        =/  updated-items=(set item:ui)
+          %-  silt
+          %+  welp
+            incoming-items
+          ?~  existing-items
+            ~
+          ~(tap in u.existing-items)
+        ::
+        :_  this(feeds (~(put by feeds) src updated-items))
+        :~  :*  %give  %fact  ~[/x/sindi/items]
+                :-  %sindi-items
+                !>  ^-  (list item:ui)
+                %+  filter-items
+                  now.bowl
+                ~(tap in updated-items)
+            ==
+        ==
       ==
     ==
   ==
@@ -198,35 +268,9 @@
       [%sindi %ui-refresh ~]
     ?>  ?=([%behn %wake *] sign-arvo)
     =/  new-items
-      (fetch-feed-items our.bowl q.byk.bowl now.bowl)
-    ::
-    ::  guard against saving the same
-    ::  item twice with two headlines
-    =/  deduplicated-items
-      %+  murn
-        new-items
-      |=  =item:ui
-      ^-  (unit item:ui)
-      ?.  %+  levy
-            new-items
-          |=  other=item:ui
-          ?|  !=(link.other link.item)
-              (gte time.other time.item)
-          ==
-        ~
-      `item
-    =/  all-items  (silt deduplicated-items)
-    =/  new-feeds
-      %-  ~(gas by *(map link:ui (set item:ui)))
-      %+  turn
-        ~(tap in ~(key by feeds))
-      |=  src=link:ui
-      :-  src
-      %-  silt
-      %+  murn
-        deduplicated-items
-      |=  =item:ui
-      ?.(=(src.item src) ~ `item)
+      %+  filter-items
+        now.bowl
+      (list-all-items feeds)
     =/  icon-svg=@t
       .^  @t
           %cx
@@ -234,11 +278,9 @@
             /(scot %p our.bowl)/[q.byk.bowl]/(scot %da now.bowl)/web/images
           /[(icon-name now.bowl)]/svg
       ==
-    :_  %=  this
-          feeds  new-feeds
-        ==
+    :_  this
     :~  :*  %give  %fact  ~[/x/sindi/items]
-            [%sindi-items !>((filter-items now.bowl ~(tap in all-items)))]
+            [%sindi-items !>(new-items)]
         ==
         :*  %pass  /sindi/ui-refresh
             %arvo  %b

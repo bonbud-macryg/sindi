@@ -303,19 +303,18 @@
           %+  turn
             %-  sort
             :_  aor
-            %+  turn
-              feeds
-            |=  url=link:ui
+            feeds
+          |=  feed-url=@t
+          ^-  manx
+          =/  display-url=@t
             %-  trim-trailing-slash:link
             %-  trim-www:link
             %-  trim-protocol:link
-            url
-          |=  url=@t
-          ^-  manx
+            feed-url
           ;li
-            ;span: {(trip url)}
+            ;span: {(trip display-url)}
             ;form(event "/submit/del-feed")
-              ;input(name "urls", type "hidden", value "{(trip url)}");
+              ;input(name "urls", type "hidden", value (trip feed-url));
               ;button(class "remove", type "submit", style "white-space: pre;"): {(trip ' remove')}
             ==
           ==
