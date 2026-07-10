@@ -1,2 +1,2 @@
-dist
 .zig-cache
+zig-out
