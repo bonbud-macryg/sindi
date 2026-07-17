@@ -1,6 +1,8 @@
 |%
 +$  action
-  $%  [%mark-read =link:ui]
+  $%  [%add-feeds links=(list link:ui)]
+      [%del-feed =link:ui]
+      [%mark-read =link:ui]
   ==
 ::
 ++  ui

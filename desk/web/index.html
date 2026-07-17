@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f9f5dc" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#212121" media="(prefers-color-scheme: dark)">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Sindi">
+    <title>Sindi</title>
+    <link rel="manifest" href="/sindi/manifest.json">
+    <link id="favicon" rel="icon" type="image/svg+xml" href="/~/scry/sindi/sindi/icon.mime">
+    <link rel="apple-touch-icon" href="/sindi/images/apple-touch-icon.png">
+    <link rel="stylesheet" href="/sindi/style.css">
+    <script src="/session.js"></script>
+    <script src="https://unpkg.com/@urbit/http-api@2.3.0/dist/urbit-http-api.min.js"></script>
+    <script defer src="/sindi/app.js"></script>
+  </head>
+  <body>
+    <nav id="nav">
+      <a href="/sindi" aria-label="Headlines"><img id="sindi-icon" src="/~/scry/sindi/sindi/icon.mime" alt="Sindi"></a>
+      <a href="/sindi/feeds"><button type="button">Feeds</button></a>
+      <span id="status" role="status" aria-live="polite"></span>
+    </nav>
+    <main id="app"></main>
+  </body>
+</html>

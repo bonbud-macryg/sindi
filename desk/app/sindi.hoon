@@ -1,5 +1,5 @@
-/-  *mast, *sindi, ra=rss-atom
-/+  mast, rss-sub, verb, default-agent, *sindi
+/-  *sindi, ra=rss-atom
+/+  rss-sub, verb, default-agent, *sindi
 ::
 |%
 +$  versioned-state
@@ -16,7 +16,6 @@
 ::
 ^-  agent:gall
 %+  verb  &
-%-  mast
 %-  agent:rss-sub
 |_  =bowl:gall
 +*  this  .
@@ -25,22 +24,7 @@
 ++  on-init
   ^-  (quip card _this)
   :_  this
-  :~  :*  %pass   /bind
-          %agent  [our.bowl q.byk.bowl]
-          %poke   %mast-bind
-          !>  ^-  bind:mast
-          :-  'sindi'
-          :*  %sindi
-              ~
-              %-  malt
-              ^-  (list (pair @tas path))
-              :~  [%icon /sindi/icon]
-                  [%urls /sindi/urls]
-                  [%items /sindi/items]
-              ==
-          ==
-      ==
-      :*  %pass   /update/feeds
+  :~  :*  %pass   /update/feeds
           %agent  [our.bowl q.byk.bowl]
           %watch  /rss-sub/feeds
       ==
@@ -68,6 +52,24 @@
       %sindi-action
     =/  act  !<(action vase)
     ?-    -.act
+        %add-feeds
+      :_  this
+      :~  :*  %pass  /ui/add-feeds
+              %agent  [our.bowl q.byk.bowl]
+              %poke   %rss-sub
+              !>([%add-feeds links.act])
+          ==
+      ==
+    ::
+        %del-feed
+      :_  this
+      :~  :*  %pass  /ui/del-feed
+              %agent  [our.bowl q.byk.bowl]
+              %poke   %rss-sub
+              !>([%del-feed link.act])
+          ==
+      ==
+    ::
         %mark-read
       =/  updated-feeds=(map link:ui (set item:ui))
         %-  ~(gas by *(map link:ui (set item:ui)))
@@ -90,7 +92,7 @@
               !>  ^-  (list item:ui)
               %+  filter-items
                 now.bowl
-              (list-all-items feeds)
+              (list-all-items updated-feeds)
       ==  ==
     ==
   ==
@@ -190,15 +192,9 @@
             ~
           ~(tap in u.existing-items)
         ::
-        :_  this(feeds (~(put by feeds) src updated-items))
-        :~  :*  %give  %fact  ~[/x/sindi/items]
-                :-  %sindi-items
-                !>  ^-  (list item:ui)
-                %+  filter-items
-                  now.bowl
-                ~(tap in updated-items)
-            ==
-        ==
+        =/  updated-feeds=(map link:ui (set item:ui))
+          (~(put by feeds) src updated-items)
+        [~ this(feeds updated-feeds)]
       ::
           %atom-entry
         =/  src=link:ui     (slav %t link.pole)
@@ -220,15 +216,9 @@
             ~
           ~(tap in u.existing-items)
         ::
-        :_  this(feeds (~(put by feeds) src updated-items))
-        :~  :*  %give  %fact  ~[/x/sindi/items]
-                :-  %sindi-items
-                !>  ^-  (list item:ui)
-                %+  filter-items
-                  now.bowl
-                ~(tap in updated-items)
-            ==
-        ==
+        =/  updated-feeds=(map link:ui (set item:ui))
+          (~(put by feeds) src updated-items)
+        [~ this(feeds updated-feeds)]
       ==
     ==
   ==

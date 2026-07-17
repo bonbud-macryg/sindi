@@ -9,7 +9,7 @@
   "theme_color": "#f09652",
   "icons": [
     {
-      "src": "/apps/sindi/images/apple-touch-icon.png",
+      "src": "/sindi/images/apple-touch-icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

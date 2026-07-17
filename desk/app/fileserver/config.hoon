@@ -2,7 +2,7 @@
 ::
 |%
 ++  web-root  ^-  (list @t)
-  /apps/sindi
+  /sindi
 ::
 ++  file-root  ^-  path
   /web

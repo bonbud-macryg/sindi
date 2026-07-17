@@ -106,6 +106,18 @@
   ::  and await next file change.
   ::  if we're tombstoning, set the policy and trigger clean-up
   ::
+  %+  weld
+    ^-  (list card)
+    :~  (store '/sindi' ~)
+        (store '/sindi/' ~)
+        (store '/sindi/feeds' ~)
+        (store '/sindi/feeds/' ~)
+        (store '/sindi/app.js' ~)
+        (store '/sindi/style.css' ~)
+        (store '/sindi/manifest.json' ~)
+        (store '/sindi/sw.js' ~)
+    ==
+  ^-  (list card)
   :+  [%pass /eyre/connect %arvo %e %connect [~ web-root] dap.bowl]
     (read-next [our q.byk now]:bowl file-root)
   ?.  tombstone  ~
