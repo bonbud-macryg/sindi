@@ -119,6 +119,12 @@ section {
 #nav a {
   text-decoration: none;
 }
+#nav button {
+  display: block;
+  height: 3rem;
+  line-height: 3rem;
+  transform: translateY(3px);
+}
 #add-feed {
   margin-top: 0;
   margin-bottom: 0;
