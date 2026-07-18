@@ -104,7 +104,7 @@ section {
   height: 6rem;
   align-items: center;
   gap: 1rem;
-  padding: 0 1rem 0 calc(1rem + 10px);
+  padding: 0 1rem 10px calc(1rem + 10px);
   background: linear-gradient(
     to bottom,
     var(--background) calc(100% - 10px),
