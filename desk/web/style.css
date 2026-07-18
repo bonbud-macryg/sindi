@@ -101,11 +101,6 @@ section {
 #nav a {
   text-decoration: none;
 }
-#status {
-  margin-left: auto;
-  color: var(--secondary);
-  font-size: 1.4rem;
-}
 #add-feed-form input {
   margin-left: 0.5rem;
 }

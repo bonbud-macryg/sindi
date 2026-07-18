@@ -4,7 +4,6 @@ api.ship = window.ship;
 
 const app = document.querySelector("#app");
 const nav = document.querySelector("#nav");
-const status = document.querySelector("#status");
 const icon = document.querySelector("#sindi-icon");
 const favicon = document.querySelector("#favicon");
 const state = { items: [], urls: [] };
@@ -24,16 +23,11 @@ const sourceUrl = (url) => {
   catch { return url; }
 };
 
-const setStatus = (message = "") => { status.textContent = message; };
-
 async function poke(json) {
-  setStatus("Saving…");
   try {
     await api.poke({ app: "sindi", mark: "sindi-action", json });
-    setStatus("");
   } catch (error) {
     console.error(error);
-    setStatus("Could not save");
     throw error;
   }
 }
@@ -131,9 +125,6 @@ app.addEventListener("click", async (event) => {
     });
   }
 });
-
-api.onOpen = () => setStatus("");
-api.onError = () => setStatus("Disconnected");
 
 function subscribeLive(path, event) {
   const retry = () => window.setTimeout(() => subscribeLive(path, event), 500);
