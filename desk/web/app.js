@@ -32,8 +32,8 @@ async function poke(json) {
   }
 }
 
-function renderItems() {
-  if (!state.items.length) {
+function renderItems(items = state.items) {
+  if (!items.length) {
     const host = esc(window.location.hostname.replace(/^www\./, ""));
     app.innerHTML = `<article><ul id="news" class="empty">
       <li><span>This is Sindi, a calm RSS aggregator</span><em>${host}</em></li>
@@ -44,9 +44,9 @@ function renderItems() {
     return;
   }
 
-  const items = [...state.items].sort((a, b) => Number(b.published) - Number(a.published));
+  const sorted = [...items].sort((a, b) => Number(b.published) - Number(a.published));
   let day = "";
-  const rows = items.map((item) => {
+  const rows = sorted.map((item) => {
     const date = new Date(Number(item.published) * 1000);
     const key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
     let heading = "";
@@ -72,7 +72,7 @@ function renderItems() {
 function renderFeeds() {
   const feeds = [...state.urls]
     .sort((a, b) => displayUrl(a).localeCompare(displayUrl(b), undefined, { sensitivity: "base" }))
-    .map((url) => `<li><span>${esc(displayUrl(url))}</span>
+    .map((url) => `<li><a data-feed="${esc(url)}" href="/sindi?feed=${encodeURIComponent(url)}"><span>${esc(displayUrl(url))}</span></a>
     <button class="remove" type="button" data-remove="${esc(url)}"> remove</button></li>`).join("");
   app.innerHTML = `<div><section id="add-feed"><form id="add-feed-form">
     <button type="submit">Add </button><input name="urls" type="text" placeholder="links" autocomplete="url">
@@ -80,8 +80,10 @@ function renderFeeds() {
 }
 
 function render() {
-  if (window.location.pathname.replace(/\/$/, "") === "/sindi/feeds") renderFeeds();
-  else renderItems();
+  if (window.location.pathname.replace(/\/$/, "") === "/sindi/feeds") return renderFeeds();
+  const feed = new URLSearchParams(window.location.search).get("feed");
+  if (feed) return renderItems(state.items.filter((item) => item.source === feed));
+  renderItems();
 }
 
 nav.addEventListener("click", (event) => {
@@ -91,7 +93,9 @@ nav.addEventListener("click", (event) => {
   const route = target.pathname.replace(/\/$/, "");
   if (target.origin !== window.location.origin || (route !== "/sindi" && route !== "/sindi/feeds")) return;
   event.preventDefault();
-  if (target.pathname !== window.location.pathname) history.pushState({}, "", target.pathname);
+  if (target.pathname + target.search !== window.location.pathname + window.location.search) {
+    history.pushState({}, "", target.pathname + target.search);
+  }
   render();
   window.scrollTo({ top: 0, behavior: "auto" });
 });
@@ -111,6 +115,15 @@ app.addEventListener("click", async (event) => {
   const remove = event.target.closest("[data-remove]");
   if (remove) {
     await poke({ "del-feed": { link: remove.dataset.remove } });
+    return;
+  }
+  const feed = event.target.closest("[data-feed]");
+  if (feed) {
+    event.preventDefault();
+    const target = `/sindi?feed=${encodeURIComponent(feed.dataset.feed)}`;
+    if (target !== window.location.pathname + window.location.search) history.pushState({}, "", target);
+    render();
+    window.scrollTo({ top: 0, behavior: "auto" });
     return;
   }
   const read = event.target.closest("[data-mark-read]");

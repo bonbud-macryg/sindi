@@ -182,6 +182,10 @@ section {
 #feeds {
   white-space: nowrap;
 }
+#feeds a {
+  color: var(--text);
+  text-decoration: none;
+}
 #feeds li {
   display: flex;
   align-items: center;
