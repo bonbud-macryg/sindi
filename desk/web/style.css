@@ -1,14 +1,14 @@
 @font-face {
   font-family: AdobeCaslonRegular;
   src:
-    url("/sindi/fonts/acaslonpro-regular.woff") format("woff"),
-    url("/sindi/fonts/acaslonpro-regular.woff2") format("woff2");
+    url("/apps/sindi/fonts/acaslonpro-regular.woff") format("woff"),
+    url("/apps/sindi/fonts/acaslonpro-regular.woff2") format("woff2");
 }
 @font-face {
   font-family: AdobeCaslonBold;
   src:
-    url("/sindi/fonts/acaslonpro-bold.woff") format("woff"),
-    url("/sindi/fonts/acaslonpro-bold.woff2") format("woff2");
+    url("/apps/sindi/fonts/acaslonpro-bold.woff") format("woff"),
+    url("/apps/sindi/fonts/acaslonpro-bold.woff2") format("woff2");
 }
 :root {
   --text: #212121;

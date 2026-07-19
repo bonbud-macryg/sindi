@@ -108,14 +108,14 @@
   ::
   %+  weld
     ^-  (list card)
-    :~  (store '/sindi' ~)
-        (store '/sindi/' ~)
-        (store '/sindi/feeds' ~)
-        (store '/sindi/feeds/' ~)
-        (store '/sindi/app.js' ~)
-        (store '/sindi/style.css' ~)
-        (store '/sindi/manifest.json' ~)
-        (store '/sindi/sw.js' ~)
+    :~  (store '/apps/sindi' ~)
+        (store '/apps/sindi/' ~)
+        (store '/apps/sindi/feeds' ~)
+        (store '/apps/sindi/feeds/' ~)
+        (store '/apps/sindi/app.js' ~)
+        (store '/apps/sindi/style.css' ~)
+        (store '/apps/sindi/manifest.json' ~)
+        (store '/apps/sindi/sw.js' ~)
     ==
   ^-  (list card)
   :+  [%pass /eyre/connect %arvo %e %connect [~ web-root] dap.bowl]

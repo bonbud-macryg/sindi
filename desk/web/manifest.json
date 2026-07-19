@@ -2,14 +2,14 @@
   "name": "Sindi",
   "short_name": "Sindi",
   "description": "RSS reader",
-  "start_url": "/~/login?redirect=/sindi",
-  "scope": "/sindi",
+  "start_url": "/apps/sindi",
+  "scope": "/apps/sindi",
   "display": "standalone",
   "background_color": "#f9f5dc",
   "theme_color": "#f09652",
   "icons": [
     {
-      "src": "/sindi/images/apple-touch-icon.png",
+      "src": "/apps/sindi/images/apple-touch-icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

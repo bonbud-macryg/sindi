@@ -1,10 +1,10 @@
 :~  title+'Sindi'
     info+'An RSS reader.'
     color+0x1e.1414
-    image+'/sindi/images/apple-touch-icon.png'
-    base+''
+    image+'/apps/sindi/images/apple-touch-icon.png'
+    base+'sindi'
     version+[0 0 0]
-    site+/sindi
+    site+/apps/sindi
     website+'https://github.com/bonbud-macryg/sindi'
     license+'MIT'
 ==

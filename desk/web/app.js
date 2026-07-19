@@ -72,7 +72,7 @@ function renderItems(items = state.items) {
 function renderFeeds() {
   const feeds = [...state.urls]
     .sort((a, b) => displayUrl(a).localeCompare(displayUrl(b), undefined, { sensitivity: "base" }))
-    .map((url) => `<li><a data-feed="${esc(url)}" href="/sindi?feed=${encodeURIComponent(url)}"><span>${esc(displayUrl(url))}</span></a>
+    .map((url) => `<li><a data-feed="${esc(url)}" href="/apps/sindi?feed=${encodeURIComponent(url)}"><span>${esc(displayUrl(url))}</span></a>
     <button class="remove" type="button" data-remove="${esc(url)}"> remove</button></li>`).join("");
   app.innerHTML = `<div><section id="add-feed"><form id="add-feed-form">
     <button type="submit">Add </button><input name="urls" type="text" placeholder="links" autocomplete="url">
@@ -80,7 +80,7 @@ function renderFeeds() {
 }
 
 function render() {
-  if (window.location.pathname.replace(/\/$/, "") === "/sindi/feeds") return renderFeeds();
+  if (window.location.pathname.replace(/\/$/, "") === "/apps/sindi/feeds") return renderFeeds();
   const feed = new URLSearchParams(window.location.search).get("feed");
   if (feed) return renderItems(state.items.filter((item) => item.source === feed));
   renderItems();
@@ -91,7 +91,7 @@ nav.addEventListener("click", (event) => {
   if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   const target = new URL(link.href, window.location.href);
   const route = target.pathname.replace(/\/$/, "");
-  if (target.origin !== window.location.origin || (route !== "/sindi" && route !== "/sindi/feeds")) return;
+  if (target.origin !== window.location.origin || (route !== "/apps/sindi" && route !== "/apps/sindi/feeds")) return;
   event.preventDefault();
   if (target.pathname + target.search !== window.location.pathname + window.location.search) {
     history.pushState({}, "", target.pathname + target.search);
@@ -120,7 +120,7 @@ app.addEventListener("click", async (event) => {
   const feed = event.target.closest("[data-feed]");
   if (feed) {
     event.preventDefault();
-    const target = `/sindi?feed=${encodeURIComponent(feed.dataset.feed)}`;
+    const target = `/apps/sindi?feed=${encodeURIComponent(feed.dataset.feed)}`;
     if (target !== window.location.pathname + window.location.search) history.pushState({}, "", target);
     render();
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -164,5 +164,5 @@ async function start() {
   }
 }
 
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sindi/sw.js");
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("/apps/sindi/sw.js");
 start();
