@@ -55,6 +55,23 @@
   |=  [src=link:ui src-items=(set item:ui)]
   ~(tap in src-items)
 ::
+++  merge-items
+  ::  add incoming items to a feed's set, deduplicating by url.
+  ::  a reposted item updates the old one's title; the old item's
+  ::  url, read status, and time stay as they were.
+  |=  [existing=(set item:ui) incoming=(list item:ui)]
+  ^-  (set item:ui)
+  %+  roll  incoming
+  |=  [new=item:ui acc=_existing]
+  =/  old=(unit item:ui)
+    %-  ~(rep in acc)
+    |=  [i=item:ui out=(unit item:ui)]
+    ?:(=(link.i link.new) `i out)
+  ?~  old
+    (~(put in acc) new)
+  %-  ~(put in (~(del in acc) u.old))
+  u.old(title title.new)
+::
 ++  feed-items-to-ui
   |=  [src=link:ui now=@da feed-item=(each (set item:rss:ra) (set entry:atom:ra))]
   ^-  (list item:ui)

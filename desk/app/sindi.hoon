@@ -185,12 +185,9 @@
               (~(put in *(set item:rss:ra)) item)
           ==
         =/  updated-items=(set item:ui)
-          %-  silt
-          %+  welp
-            incoming-items
-          ?~  existing-items
-            ~
-          ~(tap in u.existing-items)
+          %+  merge-items
+            (fall existing-items *(set item:ui))
+          incoming-items
         ::
         =/  updated-feeds=(map link:ui (set item:ui))
           (~(put by feeds) src updated-items)
@@ -209,12 +206,9 @@
               (~(put in *(set entry:atom:ra)) entry)
           ==
         =/  updated-items=(set item:ui)
-          %-  silt
-          %+  welp
-            incoming-items
-          ?~  existing-items
-            ~
-          ~(tap in u.existing-items)
+          %+  merge-items
+            (fall existing-items *(set item:ui))
+          incoming-items
         ::
         =/  updated-feeds=(map link:ui (set item:ui))
           (~(put by feeds) src updated-items)
