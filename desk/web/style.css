@@ -18,8 +18,8 @@
   --gap: 1.6rem;
   --line: 1.4rem;
   --leading: 2.5rem;
-  --add-links-nudge: 1px;
-  --feeds-header-nudge: 4px;
+  --add-links-nudge: 0.5rem;
+  --feeds-header-nudge: 0.5rem;
   --font: AdobeCaslonRegular, serif;
   --bold: AdobeCaslonBold, serif;
 }
@@ -148,7 +148,7 @@ section {
   padding: 0 3rem 2rem 2rem;
 }
 #news li {
-  margin-bottom: var(--gap);
+  margin-bottom: 0.5rem;
   line-height: var(--leading);
 }
 #news h3 {
@@ -189,7 +189,7 @@ section {
 #feeds li {
   display: flex;
   align-items: center;
-  margin-bottom: var(--gap);
+  margin-bottom: 0.5rem;
   line-height: var(--leading);
 }
 .remove {
