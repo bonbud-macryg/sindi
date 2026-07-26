@@ -197,13 +197,19 @@
   ?>  ?=(%handle-http-request mark)
   =+  !<([rid=@ta inbound-request:eyre] vase)
   ::
-  =;  [sav=$@(%| [%& auth=?]) pay=simple-payload:http]
+  =;  [[cache=? auth=?] pay=simple-payload:http]
     =/  serve=(list card)
       ::  if auth is required but requester doesn't have it,
-      ::  make sure to _serve_ 403, but keep original .pay for the cache
+      ::  send them to eyre's login page, telling it to bring them back to
+      ::  the url they asked for. keep original .pay for the cache
       ::
-      =?  pay  &(?=([%& %&] sav) !authenticated)
-        [[403 ~] `(as-octs:mimes:html 'unauthorized')]
+      =?  pay  &(auth !authenticated)
+        :_  ~
+        :-  303
+        :_  ~
+        :-  'location'
+        %-  crip
+        (weld "/~/login?redirect=" (en-urlt:html (trip url.request)))
       =?  data.pay  ?=(%'HEAD' method.request)
         ::NOTE  runtime cache doesn't respond to HEAD requests yet, so
         ::      we may hit this even after putting the full payload in cache.
@@ -215,28 +221,36 @@
           [%give %fact ~[path] [%http-response-data !>(data.pay)]]
           [%give %kick ~[path] ~]
       ==
-    ?:  ?=(%| sav)  [serve this]
+    ?.  cache  [serve this]
     ::  if we put the response in cache, track that we did so,
     ::  we will clear the entry on desk change
     ::
     :_  this(cash (~(put in cash) url.request))
     %+  snoc  serve
-    (store url.request ~ auth=auth.sav %payload pay)
+    (store url.request ~ auth=auth %payload pay)
   ::  don't handle illegible requests (non-read method, unknown site path)
   ::
   ?.  ?=(?(%'GET' %'HEAD') method.request)
-    [%| [405 ~] `(as-octs:mimes:html 'read-only resource')]
+    [[| |] [405 ~] `(as-octs:mimes:html 'read-only resource')]
   =+  ^-  [[ext=(unit @ta) site=(list @t)] args=(list [key=@t value=@t])]
     =-  (fall - [[~ ~] ~])
     (rush url.request ;~(plug apat:de-purl:html yque:de-purl:html))
   ?.  =(web-root (scag (lent web-root) site))
-    [%| [500 ~] `(as-octs:mimes:html 'bad route')]
+    [[| |] [500 ~] `(as-octs:mimes:html 'bad route')]
   =.  site  (slag (lent web-root) site)
+  ::  for extensionless paths, fall back to serving index.html (SPA support)
+  ::
+  =?  site  ?=(~ ext)  ~[%index]
   ::  all of the below responses get put into cache on first-request,
   ::  even if we can't serve real content. we'll clear cache and retry
   ::  whenever file-root contents change.
   ::
-  :-  :-  %&
+  ::  the exception is the index page: eyre answers cached auth-gated
+  ::  entries itself, with a 403, so caching the ui would rob us of the
+  ::  chance to redirect logged-out visitors to the login page. assets
+  ::  (js, css, icons, fonts) still get cached as normal.
+  ::
+  :-  :-  cache=!?=([%index ~] site)
       ::  get auth flag from longest prefix
       ::
       ::NOTE  since this goes into cache after computing once,
@@ -245,9 +259,6 @@
       ?:  =(/ site)  (~(got by auth) /)
       %-  (bond |.(^$(site (snip site))))
       (~(get by auth) site)
-  ::  for extensionless paths, fall back to serving index.html (SPA support)
-  ::
-  =?  site  ?=(~ ext)  ~[%index]
   =/  ex=@ta  (fall ext %html)
   =/  =path
     :*  (scot %p our.bowl)

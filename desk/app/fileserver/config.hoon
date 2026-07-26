@@ -7,5 +7,5 @@
 ++  file-root  ^-  path
   /web
 ::
-++  auth  |
+++  auth  &
 --
