@@ -15,7 +15,7 @@
 =*  state  -
 ::
 ^-  agent:gall
-%+  verb  &
+%+  verb  |
 %-  agent:rss-sub
 |_  =bowl:gall
 +*  this  .
