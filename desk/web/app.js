@@ -35,11 +35,20 @@ async function poke(json) {
 function renderItems(items = state.items) {
   if (!items.length) {
     const host = esc(window.location.hostname.replace(/^www\./, ""));
+    const mobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent) ||
+      (navigator.maxTouchPoints > 1 && /macintosh/i.test(navigator.userAgent));
+
+    // macos: dock
+    // ios / ipados: homescreen
+    // windows / linux: taskbar
+    const shelf = mobile ? "homescreen" : /mac/i.test(navigator.userAgent) ? "dock" : "taskbar";
+
     app.innerHTML = `<article><ul id="news" class="empty">
-      <li><span>This is Sindi, a calm RSS aggregator</span> <em>${host}</em></li>
-      <li><span>It refreshes every fifteen minutes</span> <em>${host}</em></li>
-      <li><span>Click “Feeds” to add some feeds</span> <em>${host}</em></li>
+      <li><span>This is Sindi, an RSS headline aggregator</span> <em>${host}</em></li>
+      <li><span>It refreshes every fifteen minutes, if at all</span> <em>${host}</em></li>
+      <li><span>Click “Feeds” to add feeds</span> <em>${host}</em></li>
       <li><span>Click the icon to see headlines</span> <em>${host}</em></li>
+      <li><span>Save it to your ${shelf} and check in later</span> <em>${host}</em></li>
     </ul></article>`;
     return;
   }
