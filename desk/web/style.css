@@ -36,6 +36,7 @@
   padding: 0;
 }
 html {
+  overflow-x: hidden;
   font-family: var(--font);
   font-size: 10px;
   background: var(--background);
@@ -183,8 +184,11 @@ section {
   white-space: nowrap;
 }
 #feeds a {
+  overflow: hidden;
+  min-width: 0;
   color: var(--text);
   text-decoration: none;
+  text-overflow: ellipsis;
 }
 #feeds li {
   display: flex;
@@ -193,6 +197,7 @@ section {
   line-height: var(--leading);
 }
 .remove {
+  flex-shrink: 0;
   margin-left: 0.5rem;
   padding-right: 5px;
   color: var(--secondary);
