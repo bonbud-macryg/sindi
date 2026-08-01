@@ -36,10 +36,10 @@ function renderItems(items = state.items) {
   if (!items.length) {
     const host = esc(window.location.hostname.replace(/^www\./, ""));
     app.innerHTML = `<article><ul id="news" class="empty">
-      <li><span>This is Sindi, a calm RSS aggregator</span><em>${host}</em></li>
-      <li><span>It refreshes every fifteen minutes</span><em>${host}</em></li>
-      <li><span>Click “Feeds” to add some feeds</span><em>${host}</em></li>
-      <li><span>Click the icon to see headlines</span><em>${host}</em></li>
+      <li><span>This is Sindi, a calm RSS aggregator</span> <em>${host}</em></li>
+      <li><span>It refreshes every fifteen minutes</span> <em>${host}</em></li>
+      <li><span>Click “Feeds” to add some feeds</span> <em>${host}</em></li>
+      <li><span>Click the icon to see headlines</span> <em>${host}</em></li>
     </ul></article>`;
     return;
   }
