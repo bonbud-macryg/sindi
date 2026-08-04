@@ -117,13 +117,20 @@ app.addEventListener("submit", async (event) => {
   const links = new FormData(event.target).get("urls").trim().split(/\s+/).filter(Boolean);
   if (!links.length) return;
   await poke({ "add-feeds": { links } });
+  const known = new Set(state.urls);
+  state.urls = [...state.urls, ...links.filter((link) => !known.has(link))];
   event.target.reset();
+  render();
 });
 
 app.addEventListener("click", async (event) => {
   const remove = event.target.closest("[data-remove]");
   if (remove) {
-    await poke({ "del-feed": { link: remove.dataset.remove } });
+    const link = remove.dataset.remove;
+    await poke({ "del-feed": { link } });
+    state.urls = state.urls.filter((url) => url !== link);
+    state.items = state.items.filter((item) => item.source !== link);
+    render();
     return;
   }
   const feed = event.target.closest("[data-feed]");
