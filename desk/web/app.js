@@ -160,13 +160,36 @@ async function start() {
       api.scry({ app: "sindi", path: "/sindi/urls" }),
     ]);
     render();
-    subscribeLive("/x/sindi/items", (items) => { state.items = items; render(); });
-    subscribeLive("/x/sindi/urls", (urls) => { state.urls = urls; render(); });
-    subscribeLive("/x/sindi/icon", () => {
+
+    // coalesce update bursts (e.g. a pwa waking from the background)
+    // into one flush: debounce with backoff, so every event within a
+    // burst lands in the same repaint instead of trickling in
+    const flushBase = 150;
+    const flushMax = 2000;
+    let flushDelay = flushBase;
+    let flushTimer = null;
+    let iconStale = false;
+    const flush = () => {
+      flushTimer = null;
+      flushDelay = flushBase;
+      if (iconStale) {
+        iconStale = false;
         const iconUrl = `/~/scry/sindi/sindi/icon.mime?${Date.now()}`;
         icon.src = iconUrl;
         favicon.href = iconUrl;
-    });
+      }
+      render();
+    };
+    const scheduleFlush = () => {
+      if (flushTimer !== null) {
+        window.clearTimeout(flushTimer);
+        flushDelay = Math.min(flushDelay * 2, flushMax);
+      }
+      flushTimer = window.setTimeout(flush, flushDelay);
+    };
+    subscribeLive("/x/sindi/items", (items) => { state.items = items; scheduleFlush(); });
+    subscribeLive("/x/sindi/urls", (urls) => { state.urls = urls; scheduleFlush(); });
+    subscribeLive("/x/sindi/icon", () => { iconStale = true; scheduleFlush(); });
   } catch (error) {
     console.error(error);
     app.innerHTML = '<section class="error"><h2>Could not load Sindi</h2><p>Refresh the page to try again.</p></section>';
