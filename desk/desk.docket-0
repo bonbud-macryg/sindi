@@ -1,6 +1,6 @@
 :~  title+'Sindi'
     info+'An RSS reader.'
-    color+0x1e.1414
+    color+0xf9.f5dc
     image+'/~/scry/sindi/sindi/icon.mime'
     base+'sindi'
     version+[0 0 0]
