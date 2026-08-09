@@ -8,6 +8,9 @@ const icon = document.querySelector("#sindi-icon");
 const favicon = document.querySelector("#favicon");
 const state = { items: [], urls: [] };
 
+const mobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent) ||
+  (navigator.maxTouchPoints > 1 && /macintosh/i.test(navigator.userAgent));
+
 const esc = (value) => String(value ?? "").replace(/[&<>'"]/g, (char) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;",
 })[char]);
@@ -35,8 +38,6 @@ async function poke(json) {
 function renderItems(items = state.items) {
   if (!items.length) {
     const host = esc(window.location.hostname.replace(/^www\./, ""));
-    const mobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent) ||
-      (navigator.maxTouchPoints > 1 && /macintosh/i.test(navigator.userAgent));
 
     // macos: dock
     // ios / ipados: homescreen
@@ -71,8 +72,7 @@ function renderItems(items = state.items) {
     }
     return `<li>${heading}<a class="item-link${item.read ? " read" : ""}" href="${esc(item.url)}"
       target="_blank" rel="noopener noreferrer" data-mark-read="${esc(item.url)}">
-      <span>${esc(item.title)}</span></a>
-      <a class="source" href="${esc(sourceUrl(item.source))}" target="_blank"
+      <span>${esc(item.title)}</span></a>${mobile ? "<br>" : " "}<a class="source" href="${esc(sourceUrl(item.source))}" target="_blank"
       rel="noopener noreferrer" data-mark-read="${esc(item.url)}"><em>${esc(hostname(item.source))}</em></a></li>`;
   }).join("");
   app.innerHTML = `<article><ul id="news">${rows}</ul></article>`;
