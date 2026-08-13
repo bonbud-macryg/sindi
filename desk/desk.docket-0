@@ -1,5 +1,5 @@
 :~  title+'Sindi'
-    info+'An RSS reader.'
+    info+'An RSS aggregator'
     color+0xf9.f5dc
     image+'/~/scry/sindi/sindi/icon.mime'
     base+'sindi'
