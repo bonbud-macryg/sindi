@@ -20,6 +20,44 @@ const hostname = (url) => {
   catch { return url; }
 };
 
+// label each feed by hostname; when two feeds share a hostname,
+// extend both labels with path segments until they differ
+const sourceLabels = (urls) => {
+  const parsed = urls.map((url) => {
+    try {
+      const target = new URL(url);
+      return {
+        url,
+        host: target.hostname.replace(/^www\./, ""),
+        segments: target.pathname.split("/").filter(Boolean),
+      };
+    } catch {
+      return { url, host: url, segments: [] };
+    }
+  });
+  const groups = new Map();
+  for (const feed of parsed) {
+    if (!groups.has(feed.host)) groups.set(feed.host, []);
+    groups.get(feed.host).push(feed);
+  }
+  const labels = new Map();
+  for (const [host, group] of groups) {
+    if (group.length === 1) {
+      labels.set(group[0].url, host);
+      continue;
+    }
+    const max = Math.max(...group.map((feed) => feed.segments.length));
+    let depth = 0;
+    let names;
+    do {
+      depth++;
+      names = group.map((feed) => [feed.host, ...feed.segments.slice(0, depth)].join("/"));
+    } while (new Set(names).size < group.length && depth < max);
+    group.forEach((feed, index) => labels.set(feed.url, names[index]));
+  }
+  return labels;
+};
+
 const displayUrl = (url) => String(url).replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/\/$/, "");
 const sourceUrl = (url) => {
   try { const parsed = new URL(url); return `${parsed.protocol}//${parsed.hostname}`; }
@@ -54,6 +92,7 @@ function renderItems(items = state.items) {
     return;
   }
 
+  const labels = sourceLabels(state.urls);
   const sorted = [...items].sort((a, b) => Number(b.published) - Number(a.published));
   let day = "";
   const rows = sorted.map((item) => {
@@ -73,7 +112,7 @@ function renderItems(items = state.items) {
     return `<li>${heading}<a class="item-link${item.read ? " read" : ""}" href="${esc(item.url)}"
       target="_blank" rel="noopener noreferrer" data-mark-read="${esc(item.url)}">
       <span>${esc(item.title)}</span></a>${mobile ? "<br>" : " "}<a class="source" href="${esc(sourceUrl(item.source))}" target="_blank"
-      rel="noopener noreferrer" data-mark-read="${esc(item.url)}"><em>${esc(hostname(item.source))}</em></a></li>`;
+      rel="noopener noreferrer" data-mark-read="${esc(item.url)}"><em>${esc(labels.get(item.source) ?? hostname(item.source))}</em></a></li>`;
   }).join("");
   app.innerHTML = `<article><ul id="news">${rows}</ul></article>`;
 }
