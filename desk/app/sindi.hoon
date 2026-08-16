@@ -150,7 +150,16 @@
           ==  ==
         ::
             %feed-deleted
+          ::  drop the per-feed watch, else a later re-add of the
+          ::  same url sends a duplicate %watch and never gets acked
+          =/  =wire  /update/feed/(scot %t link.upd)
+          =/  leave=(list card)
+            ?.  (~(has by wex.bowl) [wire our.bowl q.byk.bowl])
+              ~
+            [%pass wire %agent [our.bowl q.byk.bowl] %leave ~]~
           :_  this(feeds (~(del by feeds) link.upd))
+          %+  weld  leave
+          ^-  (list card)
           :~  :*  %give  %fact  ~[/x/sindi/urls]
                   feed-urls+!>(~(tap in ~(key by (~(del by feeds) link.upd))))
               ==
