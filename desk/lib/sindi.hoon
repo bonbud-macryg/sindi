@@ -39,6 +39,17 @@
   ==
   (snag step icons)
 ::
+::
+::  how many items a fact or default page carries
+++  page-size  50
+::
+::  newest first
+++  sort-items
+  |=  items=(list item:ui)
+  ^-  (list item:ui)
+  %+  sort  items
+  |=([a=item:ui b=item:ui] (gth time.a time.b))
+::
 ++  filter-items
   |=  [now=@da items=(list item:ui)]
   ^-  (list item:ui)

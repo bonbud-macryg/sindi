@@ -6,7 +6,18 @@ const app = document.querySelector("#app");
 const nav = document.querySelector("#nav");
 const icon = document.querySelector("#sindi-icon");
 const favicon = document.querySelector("#favicon");
-const state = { items: [], urls: [] };
+const state = { items: [], urls: [], exhausted: false };
+
+// how many items to fetch per page; matches page-size in /lib/sindi
+const PAGE_SIZE = 50;
+
+// facts and pages can overlap; keep one item per url,
+// letting the incoming copy win (fresher title / read state)
+const mergeItems = (incoming) => {
+  const byUrl = new Map(state.items.map((item) => [item.url, item]));
+  for (const item of incoming) byUrl.set(item.url, item);
+  state.items = [...byUrl.values()];
+};
 
 const mobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent) ||
   (navigator.maxTouchPoints > 1 && /macintosh/i.test(navigator.userAgent));
@@ -114,7 +125,9 @@ function renderItems(items = state.items) {
       <span>${esc(item.title)}</span></a>${mobile ? "<br>" : " "}<a class="source" href="${esc(sourceUrl(item.source))}" target="_blank"
       rel="noopener noreferrer" data-mark-read="${esc(item.url)}"><em>${esc(labels.get(item.source) ?? hostname(item.source))}</em></a></li>`;
   }).join("");
-  app.innerHTML = `<article><ul id="news">${rows}</ul></article>`;
+  const more = state.exhausted ? "" : `<li><a id="load-more" class="item-link" href="#">
+    <span><strong>Load more</strong></span></a></li>`;
+  app.innerHTML = `<article><ul id="news">${rows}${more}</ul></article>`;
 }
 
 function renderFeeds() {
@@ -181,6 +194,12 @@ app.addEventListener("click", async (event) => {
     window.scrollTo({ top: 0, behavior: "auto" });
     return;
   }
+  const more = event.target.closest("#load-more");
+  if (more) {
+    event.preventDefault();
+    loadMore();
+    return;
+  }
   const read = event.target.closest("[data-mark-read]");
   if (read) {
     const link = read.dataset.markRead;
@@ -194,6 +213,25 @@ app.addEventListener("click", async (event) => {
   }
 });
 
+let loadingMore = false;
+async function loadMore() {
+  if (loadingMore || state.exhausted) return;
+  loadingMore = true;
+  try {
+    const page = await api.scry({
+      app: "sindi",
+      path: `/sindi/items/${state.items.length}/${PAGE_SIZE}`,
+    });
+    if (page.length < PAGE_SIZE) state.exhausted = true;
+    mergeItems(page);
+    render();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loadingMore = false;
+  }
+}
+
 function subscribeLive(path, event) {
   const retry = () => window.setTimeout(() => subscribeLive(path, event), 500);
   api.subscribe({ app: "sindi", path, event, err: retry, quit: retry });
@@ -202,9 +240,10 @@ function subscribeLive(path, event) {
 async function start() {
   try {
     [state.items, state.urls] = await Promise.all([
-      api.scry({ app: "sindi", path: "/sindi/items" }),
+      api.scry({ app: "sindi", path: `/sindi/items/0/${PAGE_SIZE}` }),
       api.scry({ app: "sindi", path: "/sindi/urls" }),
     ]);
+    state.exhausted = state.items.length < PAGE_SIZE;
     render();
 
     // coalesce update bursts (e.g. a pwa waking from the background)
@@ -233,7 +272,7 @@ async function start() {
       }
       flushTimer = window.setTimeout(flush, flushDelay);
     };
-    subscribeLive("/x/sindi/items", (items) => { state.items = items; scheduleFlush(); });
+    subscribeLive("/x/sindi/items", (items) => { mergeItems(items); scheduleFlush(); });
     subscribeLive("/x/sindi/urls", (urls) => { state.urls = urls; scheduleFlush(); });
     subscribeLive("/x/sindi/icon", () => { iconStale = true; scheduleFlush(); });
   } catch (error) {

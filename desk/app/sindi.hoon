@@ -90,6 +90,8 @@
       :~  :*  %give  %fact  ~[/x/sindi/items]
               :-  %sindi-items
               !>  ^-  (list item:ui)
+              %+  scag  page-size
+              %-  sort-items
               %+  filter-items
                 now.bowl
               (list-all-items updated-feeds)
@@ -110,6 +112,20 @@
       %-  some
       :-  %sindi-items
       !>  ^-  (list item:ui)
+      %+  filter-items
+        now.bowl
+      (list-all-items feeds)
+    ::
+    ::  .^(json %gx /=sindi=/sindi/items/0/50/json)
+    ::  .^((list item:ui:sindi) %gx /=sindi=/sindi/items/0/50/noun)
+      [%x %sindi %items offset=@ count=@ ~]
+      %-  some
+      %-  some
+      :-  %sindi-items
+      !>  ^-  (list item:ui)
+      %+  scag  (slav %ud count.pole)
+      %+  slag  (slav %ud offset.pole)
+      %-  sort-items
       %+  filter-items
         now.bowl
       (list-all-items feeds)
@@ -261,6 +277,8 @@
       [%sindi %ui-refresh ~]
     ?>  ?=([%behn %wake *] sign-arvo)
     =/  new-items
+      %+  scag  page-size
+      %-  sort-items
       %+  filter-items
         now.bowl
       (list-all-items feeds)
